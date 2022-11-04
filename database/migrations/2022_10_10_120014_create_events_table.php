@@ -17,6 +17,8 @@ return new class extends Migration
             $table->increments('id');
             $table->string('nama_event');
             $table->string('slug_event');
+            $table->string('deskripsi');
+            $table->string('status');
             $table->date('tanggal_awal');
             $table->date('tanggal_akhir');
             $table->integer('user_id')->unsigned();

@@ -20,8 +20,7 @@ class EventController extends Controller
     {
         $user = $request->user();
         $itemevent = Event::where('user_id', $user->id)->get();
-        $userCount = DaftarEvent::get();
-        $data = array('title' => 'Event', 'itemevent' => $itemevent, 'userCount' => $userCount);
+        $data = array('title' => 'Event', 'itemevent' => $itemevent);
         return view('event.index' , $data);
     }
 
@@ -47,6 +46,7 @@ class EventController extends Controller
         $this->validate($request, [
             'nama_event' => 'required',
             'slug_event' => 'required|unique:event',
+            'deskripsi' => 'required',
             'tanggal_awal' => 'required',
             'tanggal_akhir' => 'required'
         ]);
@@ -101,6 +101,7 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
         $this->validate($request,[
             'nama_event' => 'required',
+            'deskripsi' => 'required',
             'tanggal_awal' => 'required',
             'tanggal_akhir' => 'required'
         ]);
@@ -118,7 +119,7 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
         $daftarEvent = DaftarEvent::where('event_id', $id);
-        $promo = ProdukPromo::where('event_id',$id);
+        $promo = ProdukPromo::where('event_id', $id);
         if($daftarEvent) {
             if ($promo) {
                 $promo->delete();

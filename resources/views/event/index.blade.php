@@ -65,8 +65,8 @@
                   <td>
                     {{ $event->tanggal_akhir }}
                   </td>
-                  @if (isset($userCount))
-                    @if($userCount->event_id == $event->id)
+                  @if (isset($event->userDaftar->event_id))
+                    @if($event->userDaftar->event_id == $event->id)
                         <td>
                             {{ number_format(count($userCount)) }}
                         </td>
