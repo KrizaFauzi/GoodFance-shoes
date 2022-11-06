@@ -69,6 +69,9 @@
       </div>
     </div>
   </div>
-
+  <script src="//cdn.ckeditor.com/4.20.0/standard/ckeditor.js"></script>
+  <script type="text/javascript">
+     CKEDITOR.replace( 'deskripsi' );
+  </script>
 
 @endsection

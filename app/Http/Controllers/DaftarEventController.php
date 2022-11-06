@@ -32,4 +32,18 @@ class DaftarEventController extends Controller
             return redirect()->route('/')->with('success', 'Berhasil Daftar Event');
         }
     }
+
+    public function all(Request $request){
+        $user = $request->user();
+        $event = DaftarEvent::where('user_id', $user->id )->get();
+        $data = array('title' => 'Event yang diikuti' ,'event'=> $event);
+        return view('daftar_event.all', $data);
+    }
+
+    public function history(Request $request){
+        $user = $request->user();
+        $event = DaftarEvent::where('user_id', $user->id )->get();
+        $data = array('title' => 'Event yang diikuti' ,'event'=> $event);
+        return view('daftar_event.history', $data);
+    }
 }

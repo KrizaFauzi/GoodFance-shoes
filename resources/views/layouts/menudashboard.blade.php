@@ -72,13 +72,13 @@
       </a>
       <ul class="nav nav-treeview">
         <li class="nav-item">
-          <a href="" class="nav-link">
+          <a href="seller/events" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>Event saat ini</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="" class="nav-link">
+          <a href="seller/history_event" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>History event</p>
           </a>

@@ -61,6 +61,8 @@ Route::group(['prefix' => 'seller','middleware'=>['auth','CekLevel:seller']], fu
     Route::resource('promoted_produk', \App\Http\Controllers\PromotedProdukController::class);
     Route::resource('produk', \App\Http\Controllers\ProdukController::class);
     Route::resource('customer', \App\Http\Controllers\CustomerController::class);
+    Route::get('events', [\App\Http\Controllers\DaftarEventController::class, 'all']);
+    Route::get('history_event', [\App\Http\Controllers\DaftarEventController::class, 'history']);
     Route::get('daftar_event/{event_id}', [\App\Http\Controllers\DaftarEventController::class, 'index']);
     Route::post('daftar_event/{event_id}', [\App\Http\Controllers\DaftarEventController::class, 'store']);
     Route::post('produkimage',[\App\Http\Controllers\ProdukController::class,'uploadimage']);
