@@ -30,31 +30,32 @@
                     <p>{{ $message }}</p>
                 </div>
             @endif
-            <form action="{{ route('event.store') }}" method="post">
-              @csrf
+            <form action="{{ route('event.update', $event->id) }}" method="post">
+            {{ method_field('patch') }}
+            @csrf
               <div class="form-group">
                 <label for="nama_event">Nama event</label>
-                <input type="text" name="nama_event" id="nama_event" class="form-control" value="{{  }}">
+                <input type="text" name="nama_event" id="nama_event" class="form-control" value="{{ $event->nama_event }}">
               </div>
               <div class="form-group">
                 <label for="slug_event">Slug event</label>
-                <input type="text" name="slug_event" id="slug_event" class="form-control" readonly value="{{ }}">
+                <input type="text" name="slug_event" id="slug_event" class="form-control" readonly value="{{ $event->slug_event }}">
               </div>
               <div class="form-group">
                 <label for="deskripsi">Deskripsi</label>
-                <textarea name="deskripsi" id="deskripsi" cols="30" rows="5" class="form-control"></textarea>
+                <textarea name="deskripsi" id="deskripsi" cols="30" rows="5" class="form-control">{{ $event->deskripsi }}</textarea>
               </div>
               <div class="row">
                 <div class="col">
                   <div class="form-group">
                     <label for="tanggal_awal">Tanggal Awal</label>
-                    <input type="date" name="tanggal_awal" id="tanggal_awal" class="form-control">
+                    <input type="date" name="tanggal_awal" id="tanggal_awal" class="form-control" value="{{ $event->tanggal_awal }}">
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-group">
                     <label for="tanggal_akhir">Tanggal Akhir</label>
-                    <input type="date" name="tanggal_akhir" id="tanggal_akhir" class="form-control">
+                    <input type="date" name="tanggal_akhir" id="tanggal_akhir" class="form-control" value="{{ $event->tanggal_akhir }}">
                   </div>
                 </div>
               </div>

@@ -12,9 +12,10 @@ class Event extends Model
         'user_id',
         'nama_event',
         'deskripsi',
+        'status',
         'slug_event',
         'tanggal_awal',
-        'tanggal_akhir',
+        'tanggal_akhir'
     ];
 
     public function user(){

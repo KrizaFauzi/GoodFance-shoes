@@ -61,7 +61,7 @@
     <div class="col">
       <div class="card">
         <div class="card-header">
-          <h4 class="card-title">Produk Baru</h4>
+          <h4 class="card-title">Produk</h4>
           <div class="card-tools">
             <a href="#" class="btn btn-sm btn-primary">
               More

@@ -3,7 +3,7 @@
     <!-- Add icons to the links using the .nav-icon class
           with font-awesome or any other icon font library -->
     <li class="nav-item">
-      <a href="/admin" class="nav-link">
+      <a href="/seller" class="nav-link">
         <i class="nav-icon fas fa-th"></i>
         <p>
           Dashboard
@@ -20,25 +20,19 @@
       </a>
       <ul class="nav nav-treeview">
         <li class="nav-item">
-          <a href="/admin/kategori" class="nav-link">
-            <i class="far fa-circle nav-icon"></i>
-            <p>Kategori Produk</p>
-          </a>
-        </li>
-        <li class="nav-item">
           <a href="{{ route('produk.index') }}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>Add Produk</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/promo" class="nav-link">
+          <a href="{{ route('promo.index') }}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>Promo</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="/admin/promoted_produk" class="nav-link">
+          <a href="{{ route('promoted_produk.index') }}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>Promo Produk</p>
           </a>
@@ -68,6 +62,9 @@
         </li>
       </ul>
     </li>
+    @if (isset($event))
+      
+    @endif
     <li class="nav-item has-treeview">
       <a href="" class="nav-link">
         <i class="nav-icon fas fa-list"></i>

@@ -5,9 +5,9 @@
     <div class="col col-lg-6 col-md-6">
       <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Form Produk</h3>
+          <h3 class="card-title">{{ $title }}</h3>
           <div class="card-tools">
-            <a href="{{ route('produk.index') }}" class="btn btn-sm btn-danger">
+            <a href="{{ route('event.index') }}" class="btn btn-sm btn-danger">
               Tutup
             </a>
           </div>

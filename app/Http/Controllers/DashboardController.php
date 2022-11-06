@@ -12,7 +12,7 @@ class DashboardController extends Controller
         $user = $request->user();
         $produk = Produk::where('user_id', $user->id)->get();
         $produkCount = count($produk);
-        $data = array('title' => 'Dashboard','produkCount' => $produkCount);
+        $data = array('title' => 'Dashboard','produkCount' => $produkCount, 'produk' => $produk);
         return view('dashboard.index', $data);
     }
 }

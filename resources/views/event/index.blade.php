@@ -6,7 +6,7 @@
     <div class="col">
       <div class="card">
         <div class="card-header">
-          <h4 class="card-title">Produk</h4>
+          <h4 class="card-title">{{ $title }}</h4>
           <div class="card-tools">
             <a href="{{ route('event.create') }}" class="btn btn-sm btn-primary">
               Baru

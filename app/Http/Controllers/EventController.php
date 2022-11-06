@@ -21,7 +21,7 @@ class EventController extends Controller
         $user = $request->user();
         $itemevent = Event::where('user_id', $user->id)->get();
         $data = array('title' => 'Event', 'itemevent' => $itemevent);
-        return view('event.index' , $data);
+        return view('event.index' , $data)->with('no', ($request->input('page', 1) - 1));
     }
 
     /**
@@ -50,16 +50,17 @@ class EventController extends Controller
             'tanggal_awal' => 'required',
             'tanggal_akhir' => 'required'
         ]);
-        $cekEvent = Event::where('slug_event', $request->slug_event)->where('status','publish');
+        $cekEvent = Event::where('slug_event', $request->slug_event)->where('status','publish')->first();
         if ($cekEvent) {
             return back()->with('error','Data Sudah Ada');
         }else{
             $user = $request->user();
             $slug = Str::slug($request->slug_event);
+            $input = $request->all();
             $input['slug_event'] = $slug;
             $input['user_id'] = $user->id;
             $input['status'] = 'publish';
-            $event = Event::create($Input);
+            $event = Event::create($input);
             return redirect()->route('event.index')->with('success','Event telah terbuat');
         }
     }
@@ -70,9 +71,12 @@ class EventController extends Controller
      * @param  \App\Models\events  $events
      * @return \Illuminate\Http\Response
      */
-    public function show(events $events)
+    public function show($id)
     {
-        //
+        $event = Event::findOrfail($id);
+        $data = array('title' => 'Event Detail',
+                    'event' => $event);
+        return view('event.show', $data);
     }
 
     /**
@@ -83,7 +87,7 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        $event = Event::where('id', $id)->where('status','publish')->get();
+        $event = Event::findOrfail($id);
         $data = array('title' => 'Event Edit Form',
                     'event' => $event);
         return view('event.edit', $data);
@@ -105,8 +109,9 @@ class EventController extends Controller
             'tanggal_awal' => 'required',
             'tanggal_akhir' => 'required'
         ]);
-        $event->update($request);
-        return redirect()->route('event.index');
+        $input = $request->all();
+        $event->update($input);
+        return redirect()->route('event.index')->with('success', 'Data berhasil diupdate');
     }
 
     /**
