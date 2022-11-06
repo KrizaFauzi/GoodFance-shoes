@@ -21,15 +21,15 @@ class DaftarEventController extends Controller
     {
         $cekEvent = DaftarEvent::where('user_id', '=', $request->user()->id )->first();
         if ($cekEvent) {
-            return back()->with('error', 'Data sudah ada');
+            return back()->with('error', 'Anda sudah daftar di event ini');
         } else {
             $itemuser = $request->user();
             $inputan = $request->all();
             $inputan['user_id'] = $itemuser->id;
             $inputan['user_name'] = $itemuser->name;
-            $inputann['event_id'] = $event_id;
+            $inputan['event_id'] = $event_id;
             $event = DaftarEvent::create($inputan);
-            return redirect()->route('promo.index')->with('success', 'Data berhasil disimpan');
+            return redirect()->route('/')->with('success', 'Berhasil Daftar Event');
         }
     }
 }

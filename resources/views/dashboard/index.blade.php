@@ -61,53 +61,27 @@
     <div class="col">
       <div class="card">
         <div class="card-header">
-          <h4 class="card-title">Produk</h4>
-          <div class="card-tools">
-            <a href="#" class="btn btn-sm btn-primary">
-              More
+          <h4 class="card-title">Event Terbaru</h4>
+        </div>
+        @forelse ($event as $events)
+          <div class="card-body">
+            <a href="/seller/daftar_event/{{ $events->id }}">
+              <div class="card text-white bg-info mb-3" >
+                <h4 class="card-header">{{ $events->nama_event }}</h4>
+                <div class="card-body">
+                  <h5 class="card-title">Berakhir pada {{ $events->tanggal_akhir }}</h5>
+                  <p class="card-text">{{ $events->deskripsi }}</p>
+                </div>
+              </div>
             </a>
           </div>
-        </div>
-        <div class="card-body">
-          <table class="table table-bordered">
-            <thead>
-              <tr>
-                <th>No</th>
-                <th>Kode</th>
-                <th>Nama</th>
-                <th>Kategori</th>
-                <th>Qty</th>
-                <th>Harga</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>PRO-1</td>
-                <td>Baju Atasan</td>
-                <td>Baju Anak</td>
-                <td>12 kodi</td>
-                <td>5.000</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>PRO-2</td>
-                <td>Gamis</td>
-                <td>Baju Wanita</td>
-                <td>20 kodi</td>
-                <td>25.000</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>PRO-3</td>
-                <td>Daster</td>
-                <td>Baju Wanita</td>
-                <td>20 kodi</td>
-                <td>125.000</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+          @empty
+          <div class="container mt-2">
+            <div class="alert alert-info" role="alert">
+              Tidak Ada Event terbaru
+             </div>
+          </div>
+        @endforelse
       </div>
     </div>
   </div>

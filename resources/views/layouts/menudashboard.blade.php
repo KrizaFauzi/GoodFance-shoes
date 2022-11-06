@@ -62,9 +62,29 @@
         </li>
       </ul>
     </li>
-    @if (isset($event))
-      
-    @endif
+    <li class="nav-item has-treeview">
+      <a href="#" class="nav-link">
+        <i class="nav-icon fas fa-folder-open"></i>
+        <p>
+          Event
+          <i class="right fas fa-angle-left"></i>
+        </p>
+      </a>
+      <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Event saat ini</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>History event</p>
+          </a>
+        </li>
+      </ul>
+    </li>
     <li class="nav-item has-treeview">
       <a href="" class="nav-link">
         <i class="nav-icon fas fa-list"></i>
