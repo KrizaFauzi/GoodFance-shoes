@@ -51,13 +51,7 @@
         <li class="nav-item">
           <a href="{{ url('seller/events') }}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>Event saat ini</p>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="{{ url('seller/history_event') }}" class="nav-link">
-            <i class="far fa-circle nav-icon"></i>
-            <p>History event</p>
+            <p>Event diikuti</p>
           </a>
         </li>
       </ul>

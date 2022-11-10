@@ -83,12 +83,12 @@
                     <a href="{{ route('event.edit', $event->id) }}" class="btn btn-sm btn-primary mr-2 mb-2">
                       Edit
                     </a>
-                    <form action="{{ route('event.destroy', $event->id) }}" method="post" style="display:inline;">
+                    <form action="{{ route('event.destroy', $event->id) }}" method="post" style="display:inline;" id="hapus_event">
                       @csrf
                       {{ method_field('delete') }}
                       <button type="submit" class="btn btn-sm btn-danger mb-2">
                         Hapus
-                      </button>                    
+                      </button>
                     </form>
                   </td>
                 </tr>

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Event;
+use App\Models\DaftarEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -43,5 +44,9 @@ class User extends Authenticatable
 
     public function event(){
         return $this->hasMany(Event::class);
+    }
+
+    public function user_event(){
+        return $this->hasMany(DaftarEvent::class, 'user_id', 'id');
     }
 }

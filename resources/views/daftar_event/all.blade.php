@@ -46,7 +46,7 @@
                 </div>
                 @forelse ($event as $events)
                   <div class="card-body">
-                    <a href="/seller/daftar_event/{{ $events->event->id }}">
+                    <a href="/seller/detail_event/{{ $events->event->id }}">
                       <div class="card text-white bg-info mb-3" >
                         <h4 class="card-header">{{ $events->event->nama_event }}</h4>
                         <div class="card-body">

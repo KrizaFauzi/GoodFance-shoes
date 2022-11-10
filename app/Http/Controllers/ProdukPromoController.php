@@ -17,7 +17,8 @@ class ProdukPromoController extends Controller
      */
     public function index(Request $request)
     {
-        $itempromo = ProdukPromo::orderBy('id','desc')->paginate(20);
+        $user = $request->user();
+        $itempromo = ProdukPromo::orderBy('id','desc')->where('user_id', $user->id)->paginate(20);
         $data = array('title' => 'Promo',
                     'itempromo'=>$itempromo);
         return view('promo.index', $data)->with('no', ($request->input('page', 1) - 1) * 20);
@@ -57,6 +58,26 @@ class ProdukPromoController extends Controller
             $inputan['user_id'] = $itemuser->id;
             $itempromo = ProdukPromo::create($inputan);
             return redirect()->route('promo.index')->with('success', 'Data berhasil disimpan');
+        }
+    }
+
+    public function storeIt(Request $request, $id)
+    {
+        $this->validate($request, [
+            'nama_promo' => 'required',
+            'diskon_persen' => 'required',
+        ]);
+        // cek dulu apakah sudah ada, produk hanya bisa masuk 1 promo
+        $cekpromo = ProdukPromo::where('nama_promo', $request->kode_promo)->where('user_id', '=', $request->user()->id )->first();
+        if ($cekpromo) {
+            return back()->with('error', 'Data sudah ada');
+        } else {
+            $itemuser = $request->user();
+            $inputan = $request->all();
+            $inputan['event_id'] = $id;
+            $inputan['user_id'] = $itemuser->id;
+            $itempromo = ProdukPromo::create($inputan);
+            return redirect()->route('promos.index')->with('success', 'Data berhasil disimpan');
         }
     }
 

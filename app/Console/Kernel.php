@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,7 +17,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            $mytime = Carbon::now()->format('y-m-d');
+            DB::table('daftar_event')->join('event', 'daftar_event.event_id', '=', 'event.id')->where('event.tanggal_akhir', $mytime)->delete();
+            DB::table('promo')->join('event', 'promo.event_id', '=', 'event.id')->where('event.tanggal_akhir', $mytime)->delete();
+            DB::table('event')->where('tanggal_akhir', $mytime)->delete();
+        })->dailyAt('03:00');
     }
 
     /**

@@ -48,6 +48,8 @@ Route::group(['prefix' => 'admin','middleware'=>['auth','CekLevel:admin']], func
     Route::get('/', [\App\Http\Controllers\DashboardController::class,'index']);
     Route::resource('kategori', \App\Http\Controllers\KategoriController::class);
     Route::resource('event', \App\Http\Controllers\EventController::class);
+    Route::post('promos/{id}', [\App\Http\Controllers\EventController::class,'storeIt'])->name('promos.store');
+    Route::delete('promos/{id}', [\App\Http\Controllers\EventController::class,'destroyIt'])->name('promos.destroy');
     Route::get('image', [\App\Http\Controllers\ImageController::class,'index']);
     Route::post('image', [\App\Http\Controllers\ImageController::class,'store']);
     Route::delete('image/{id}', [\App\Http\Controllers\ImageController::class,'destroy']);
@@ -62,8 +64,8 @@ Route::group(['prefix' => 'seller','middleware'=>['auth','CekLevel:seller']], fu
     Route::resource('produk', \App\Http\Controllers\ProdukController::class);
     Route::resource('customer', \App\Http\Controllers\CustomerController::class);
     Route::get('events', [\App\Http\Controllers\DaftarEventController::class, 'all']);
-    Route::get('history_event', [\App\Http\Controllers\DaftarEventController::class, 'history']);
     Route::get('daftar_event/{event_id}', [\App\Http\Controllers\DaftarEventController::class, 'index']);
+    Route::get('detail_event/{event_id}', [\App\Http\Controllers\DaftarEventController::class, 'detail']);
     Route::post('daftar_event/{event_id}', [\App\Http\Controllers\DaftarEventController::class, 'store']);
     Route::post('produkimage',[\App\Http\Controllers\ProdukController::class,'uploadimage']);
     Route::delete('produkimage/{id}', [\App\Http\Controllers\ProdukController::class,'deleteimage']);

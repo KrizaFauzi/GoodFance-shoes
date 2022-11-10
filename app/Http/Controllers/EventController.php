@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use App\Models\DaftarEvent;
+use App\Models\promoted_produk;
 use App\Models\ProdukPromo;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class EventController extends Controller
@@ -71,12 +74,15 @@ class EventController extends Controller
      * @param  \App\Models\events  $events
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
+        $user  = $request->user();
         $event = Event::findOrfail($id);
+        $itempromo = ProdukPromo::where('user_id', $user->id)->where('event_id', $id)->get();
         $data = array('title' => 'Event Detail',
-                    'event' => $event);
-        return view('event.show', $data);
+                    'event' => $event, 
+                    'itempromo' => $itempromo);
+        return view('event.show', $data)->with('no', ($request->input('page', 1) - 1));
     }
 
     /**
@@ -133,5 +139,36 @@ class EventController extends Controller
         }
         $event->delete();
         return redirect()->route('event.index')->with('success', 'Event Telah Terhapus');
+    }
+
+    public function storeIt(Request $request){
+        $this->validate($request, [
+            'nama_promo' => 'required',
+            'diskon_persen' => 'required',
+        ]);
+        // cek dulu apakah sudah ada, produk hanya bisa masuk 1 promo
+        $cekpromo = ProdukPromo::where('nama_promo', $request->kode_promo)->where('user_id', '=', $request->user()->id )->first();
+        if ($cekpromo) {
+            return back()->with('error', 'Data sudah ada');
+        } else {
+            $itemuser = $request->user();
+            $inputan = $request->all();
+            $inputan['user_id'] = $itemuser->id;
+            $inputan['event_id'] = $request->id;
+            $itempromo = ProdukPromo::create($inputan);
+            return redirect()->back()->with('success', 'Data berhasil disimpan');
+        }
+    }
+
+    public function destroyIt($id){
+        $promoted_produk = promoted_produk::where('promo_id', $id);
+        $itempromo = ProdukPromo::findOrFail($id);
+        if ($itempromo) {
+            $promoted_produk->delete();
+            $itempromo->delete();
+            return back()->with('success', 'Data berhasil dihapus');
+        } else {
+            return back()->with('error', 'Data gagal dihapus');
+        }
     }
 }
