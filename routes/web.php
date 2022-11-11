@@ -50,13 +50,12 @@ Route::group(['prefix' => 'admin','middleware'=>['auth','CekLevel:admin']], func
     Route::resource('event', \App\Http\Controllers\EventController::class);
     Route::post('promos/{id}', [\App\Http\Controllers\EventController::class,'storeIt'])->name('promos.store');
     Route::delete('promos/{id}', [\App\Http\Controllers\EventController::class,'destroyIt'])->name('promos.destroy');
-    Route::get('image', [\App\Http\Controllers\ImageController::class,'index']);
-    Route::post('image', [\App\Http\Controllers\ImageController::class,'store']);
-    Route::delete('image/{id}', [\App\Http\Controllers\ImageController::class,'destroy']);
+    Route::get('image', [\App\Http\Controllers\ImageController::class,'index'])->name('image.index');
+    Route::delete('image/{id}', [\App\Http\Controllers\ImageController::class,'destroy'])->name('image.destroy');
     Route::resource('slideshow',\App\Http\Controllers\SlideshowController::class);
 });
 
-Route::group(['prefix' => 'seller','middleware'=>['auth','CekLevel:seller']], function() {
+Route::group(['prefix' => 'seller','middleware'=> ['auth','CekLevel:seller']], function() {
     Route::get('/', [\App\Http\Controllers\DashboardController::class,'index']);
     Route::get('profil', [\App\Http\Controllers\UserController::class,'index']);
     Route::get('setting', [\App\Http\Controllers\UserController::class,'setting']);

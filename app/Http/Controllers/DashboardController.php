@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Event;
 use App\Models\Produk;
 use App\Models\DaftarEvent;
@@ -12,10 +13,15 @@ class DashboardController extends Controller
 {
     public function index(Request $request) {
         $user = $request->user();
-        $produk = Produk::where('user_id', $user->id)->get();
         $event = Event::where('status', 'publish')->get();
-        $produkCount = count($produk);
-        $data = array('title' => 'Dashboard','produkCount' => $produkCount, 'produk' => $produk, 'event' => $event);
-        return view('dashboard.index', $data);
+        $eventCount = count($event);
+        $userCount = User::where('status', 'aktif')->where('level', 'member')->get()->count();
+        $sellerCount = User::where('status', 'aktif')->where('level', 'seller')->get()->count();
+        $data = array('title' => 'Dashboard','eventCount' => $eventCount, 'event' => $event, 'userCount' => $userCount, 'sellerCount' => $sellerCount);
+        if($user->level == "seller"){
+            return view('dashboard.index', $data);
+        }else if($user->level == "admin"){
+            return view('admin.dashboard.index', $data);
+        }
     }
 }

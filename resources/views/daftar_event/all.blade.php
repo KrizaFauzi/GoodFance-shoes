@@ -51,7 +51,7 @@
                         <h4 class="card-header">{{ $events->event->nama_event }}</h4>
                         <div class="card-body">
                           <h5 class="card-title">Berakhir pada {{ $events->event->tanggal_akhir }}</h5>
-                          <p class="card-text">{{ $events->event->deskripsi }}</p>
+                          <p class="card-text">{!! $events->event->deskripsi !!}</p>
                         </div>
                       </div>
                     </a>

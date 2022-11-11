@@ -18,7 +18,7 @@ class KategoriController extends Controller
         $itemkategori = Kategori::orderBy('created_at', 'desc')->paginate(20);
         $data = array('title' => 'Kategori Produk',
                     'itemkategori' => $itemkategori);
-        return view('kategori.index', $data)->with('no', ($request->input('page', 1) - 1) * 20);
+        return view('admin.kategori.index', $data)->with('no', ($request->input('page', 1) - 1) * 20);
     }
 
     /**

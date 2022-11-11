@@ -24,7 +24,11 @@ class EventController extends Controller
         $user = $request->user();
         $itemevent = Event::where('user_id', $user->id)->get();
         $data = array('title' => 'Event', 'itemevent' => $itemevent);
-        return view('event.index' , $data)->with('no', ($request->input('page', 1) - 1));
+        if($user->level == "seller"){
+            return view('event.index', $data)->with('no', ($request->input('page', 1) - 1) * 20);
+        }else if($user->level == "admin"){
+            return view('admin.event.index', $data)->with('no', ($request->input('page', 1) - 1) * 20);
+        }
     }
 
     /**
@@ -35,7 +39,7 @@ class EventController extends Controller
     public function create()
     {
         $data = array('title' => 'Event Form');
-        return view('event.create', $data);
+        return view('admin.event.create', $data);
     }
 
     /**
@@ -82,7 +86,7 @@ class EventController extends Controller
         $data = array('title' => 'Event Detail',
                     'event' => $event, 
                     'itempromo' => $itempromo);
-        return view('event.show', $data)->with('no', ($request->input('page', 1) - 1));
+        return view('admin.event.show', $data)->with('no', ($request->input('page', 1) - 1));
     }
 
     /**
@@ -96,7 +100,7 @@ class EventController extends Controller
         $event = Event::findOrfail($id);
         $data = array('title' => 'Event Edit Form',
                     'event' => $event);
-        return view('event.edit', $data);
+        return view('admin.event.edit', $data);
     }
 
     /**
@@ -117,7 +121,7 @@ class EventController extends Controller
         ]);
         $input = $request->all();
         $event->update($input);
-        return redirect()->route('event.index')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('admin.event.index')->with('success', 'Data berhasil diupdate');
     }
 
     /**
@@ -138,7 +142,7 @@ class EventController extends Controller
             $daftarEvent->delete();
         }
         $event->delete();
-        return redirect()->route('event.index')->with('success', 'Event Telah Terhapus');
+        return redirect()->route('admin.event.index')->with('success', 'Event Telah Terhapus');
     }
 
     public function storeIt(Request $request){

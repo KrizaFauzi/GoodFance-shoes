@@ -20,7 +20,7 @@ class SlideshowController extends Controller
         $itemslideshow = Slideshow::paginate(10);
         $data = array('title' => 'Dashboard Slideshow',
                     'itemslideshow' => $itemslideshow);
-        return view('slideshow.index', $data)->with('no', ($request->input('page', 1) - 1) * 10);
+        return view('admin.slideshow.index', $data)->with('no', ($request->input('page', 1) - 1) * 10);
     }
 
     /**
