@@ -23,7 +23,7 @@ class Kernel extends ConsoleKernel
             DB::table('promoted_produk')->leftJoin('promo', "promoted_produk.promo_id", "=", "promo.id")->leftJoin('event', 'promo.event_id', '=', 'event.id')->where('event.tanggal_akhir', $mytime)->delete();
             DB::table('promo')->join('event', 'promo.event_id', '=', 'event.id')->where('event.tanggal_akhir', $mytime)->delete();
             DB::table('daftar_event')->join('event', 'daftar_event.event_id', '=', 'event.id')->where('event.tanggal_akhir', $mytime)->delete();
-            DB::table('event')->where('tanggal_akhir', $mytime)->delete();
+            DB::table('event')->where('tanggal_akhir',"<", $mytime)->delete();
         })->daily();
     }
 
