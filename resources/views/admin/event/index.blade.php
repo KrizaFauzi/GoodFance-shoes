@@ -65,17 +65,13 @@
                   <td>
                     {{ $event->tanggal_akhir }}
                   </td>
-                  @if (isset($event->userDaftar->event_id))
-                    @if($event->userDaftar->event_id == $event->id)
-                        <td>
-                            {{ number_format(count($userCount)) }}
-                        </td>
+                  <td>
+                    @if (isset($event->userDaftar))
+                      {{ $event->userDaftar->count() }}
+                    @else
+                          0
                     @endif
-                  @else
-                    <td>
-                        0
-                    </td>
-                  @endif
+                  </td>
                   <td>
                     <a href="{{ route('event.show', $event->id) }}" class="btn btn-sm btn-primary mr-2 mb-2">
                       Detail

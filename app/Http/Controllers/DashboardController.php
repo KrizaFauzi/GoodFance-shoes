@@ -13,11 +13,12 @@ class DashboardController extends Controller
 {
     public function index(Request $request) {
         $user = $request->user();
+        $produkCount = Produk::where('status','publish')->get()->count();
         $event = Event::where('status', 'publish')->get();
         $eventCount = count($event);
         $userCount = User::where('status', 'aktif')->where('level', 'member')->get()->count();
         $sellerCount = User::where('status', 'aktif')->where('level', 'seller')->get()->count();
-        $data = array('title' => 'Dashboard','eventCount' => $eventCount, 'event' => $event, 'userCount' => $userCount, 'sellerCount' => $sellerCount);
+        $data = array('title' => 'Dashboard','eventCount' => $eventCount, 'event' => $event, 'userCount' => $userCount, 'sellerCount' => $sellerCount, 'produkCount' => $produkCount);
         if($user->level == "seller"){
             return view('dashboard.index', $data);
         }else if($user->level == "admin"){

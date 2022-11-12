@@ -6,6 +6,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use id;
 
 class Kernel extends ConsoleKernel
 {
@@ -19,10 +20,11 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             $mytime = Carbon::now()->format('y-m-d');
-            DB::table('daftar_event')->join('event', 'daftar_event.event_id', '=', 'event.id')->where('event.tanggal_akhir', $mytime)->delete();
+            DB::table('promoted_produk')->leftJoin('promo', "promoted_produk.promo_id", "=", "promo.id")->leftJoin('event', 'promo.event_id', '=', 'event.id')->where('event.tanggal_akhir', $mytime)->delete();
             DB::table('promo')->join('event', 'promo.event_id', '=', 'event.id')->where('event.tanggal_akhir', $mytime)->delete();
+            DB::table('daftar_event')->join('event', 'daftar_event.event_id', '=', 'event.id')->where('event.tanggal_akhir', $mytime)->delete();
             DB::table('event')->where('tanggal_akhir', $mytime)->delete();
-        })->dailyAt('03:00');
+        })->daily();
     }
 
     /**

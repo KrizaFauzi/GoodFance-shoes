@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\DaftarEvent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Event extends Model
 {
@@ -23,6 +24,6 @@ class Event extends Model
     }
 
     public function userDaftar(){
-        return $this->hasMany('App\Models\DaftarEvent', 'event_id', 'id');
+        return $this->hasMany(DaftarEvent::class);
     }
 }
