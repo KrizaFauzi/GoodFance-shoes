@@ -13,16 +13,21 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('cart_detail', function (Blueprint $table) {
+        Schema::create('alamat', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('produk_id')->unsigned();
             $table->integer('cart_id')->unsigned();
-            $table->double('qty', 12, 2)->default(0);
-            $table->double('harga', 12, 2)->default(0);
-            $table->double('diskon', 12, 2)->default(0);
-            $table->double('subtotal', 12, 2)->default(0);
+            $table->string('status');
+            $table->string('nama_penerima');
+            $table->string('no_tlp');
+            $table->text('alamat');
+            $table->string('provinsi');
+            $table->string('kota');
+            $table->string('kecamatan');
+            $table->string('kelurahan');
+            $table->string('kodepos');
             $table->foreign('cart_id')->references('id')->on('cart');
-            $table->foreign('produk_id')->references('id')->on('produk');
+            $table->integer("user_id")->unsigned();
+            $table->foreign("user_id")->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -34,6 +39,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cart_detail');
+        Schema::dropIfExists('alamat');
     }
 };

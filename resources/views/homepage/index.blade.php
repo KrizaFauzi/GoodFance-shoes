@@ -48,51 +48,55 @@
 </div>
 <!-- end kategori produk -->
   <!-- produk Promo-->
-  <div style="margin-left: 50px; margin-right: 50px; margin-top: 30px;">
-    <h4 style="margin-left: 15px;" class="fw-bolder">Promo</h4>
-    <div class="row row-cols-1 row-cols-lg-5 g-2 g-lg-3 ms-2 ms-lg-2 ms-md-2 ms-xl-2">
-      @forelse($itempromo as $promo)
-      <div class="col">
-        <div class="card" style="height: 415px;">
-          <div style="height: 190px; max-width: 270px; display: flex; align-items: center; margin-left: auto; margin-right: auto;">
-            <img src="{{ Storage::url($promo->produk->foto) }}" class="card-img-top" style="max-height: 190px; width: 100%;" alt="...">
+  @if ($itempromo)
+    <div style="margin-left: 50px; margin-right: 50px; margin-top: 30px;">
+      <h4 style="margin-left: 15px;" class="fw-bolder">Promo</h4>
+      <div class="row row-cols-1 row-cols-lg-5 g-2 g-lg-3 ms-2 ms-lg-2 ms-md-2 ms-xl-2">
+        @forelse($itempromo as $promo)
+        <div class="col">
+          <div class="card" style="height: 415px;">
+            <div style="height: 190px; max-width: 270px; display: flex; align-items: center; margin-left: auto; margin-right: auto;">
+              <img src="{{ Storage::url($promo->produk->foto) }}" class="card-img-top" style="max-height: 190px; width: 100%;" alt="...">
+            </div>
+            <div class="card-body">
+              <div>
+                <p class="card-text">{{ $promo->produk->nama_produk }}</p>
+              </div>
+              <div>
+                <p class="card-text fw-bold">Harga Diskon</p>
+              </div>
+              <div>
+                <button type="button" class="btn btn-danger"
+                  style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" disabled>
+                </button>
+                <span class="text-muted text-decoration-line-through">Rp. {{ number_format($promo->harga_awal, 2) }}</span>
+              </div>
+              <div>
+                <span>Rp. {{ number_format($promo->harga_akhir, 2) }}</span>
+              </div>
+              <div>
+                <i class="fa-solid fa-star text-warning"></i>
+                <span>5.0</span>
+              </div>
+            </div>
+            <form action="{{ route('cart.store') }}" method="POST" class="mx-3" style="display: inline-block;">
+                @csrf
+                <input type="hidden" name="produk_id" value={{$promo->produk->id}}>
+                <input type="hidden" name="seller_id" value={{$promo->produk->user->id}}>
+                <input type="hidden" name="qty" value="1">
+                <button  class="btn btn btn-outline-dark btn-sm mb-2" type="submit" style=" width:100%;">
+                Add To Cart
+                </button>
+            </form>
+            <a href="{{ URL::to('produk/'.$promo->produk->slug_produk ) }}" type="button" class="btn btn-dark btn-sm mb-2 mx-3">Details</a>
           </div>
-          <div class="card-body">
-            <div>
-              <p class="card-text">{{ $promo->produk->nama_produk }}</p>
-            </div>
-            <div>
-              <p class="card-text fw-bold">Harga Diskon</p>
-            </div>
-            <div>
-              <button type="button" class="btn btn-danger"
-                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" disabled>
-              </button>
-              <span class="text-muted text-decoration-line-through">Rp. {{ number_format($promo->harga_awal, 2) }}</span>
-            </div>
-            <div>
-              <span>Rp. {{ number_format($promo->harga_akhir, 2) }}</span>
-            </div>
-            <div>
-              <i class="fa-solid fa-star text-warning"></i>
-              <span>5.0</span>
-            </div>
-          </div>
-          <form action="{{ route('cartdetail.store') }}" method="POST" class="mx-3" style="display: inline-block;">
-              @csrf
-              <input type="hidden" name="produk_id" value={{$promo->produk->id}}>
-              <button  class="btn btn btn-outline-dark btn-sm mb-2" type="submit" style=" width:100%;">
-              Add To Cart
-              </button>
-          </form>
-          <a href="{{ URL::to('produk/'.$promo->produk->slug_produk ) }}" type="button" class="btn btn-dark btn-sm mb-2 mx-3">Details</a>
         </div>
+        @empty 
+        <div>Tidak Ada Promo</div>
+        @endforelse
       </div>
-      @empty 
-      <div>Data Kosong</div>
-      @endforelse
     </div>
-  </div>
+  @endif
   <!-- end produk promo -->
   <!-- produk Terbaru-->
   <div style="margin-left: 50px; margin-right: 50px; margin-top: 30px;">
@@ -136,9 +140,11 @@
               <span>5.0</span>
             </div>
           </div>
-          <form action="{{ route('cartdetail.store') }}" method="POST" class="mx-3" style="display: inline-block;">
+          <form action="{{ route('cart.store') }}" method="POST" class="mx-3" style="display: inline-block;">
               @csrf
               <input type="hidden" name="produk_id" value={{$produk->id}}>
+              <input type="hidden" name="seller_id" value={{$produk->user->id}}>
+              <input type="hidden" name="qty" value="1">
               <button  class="btn btn btn-outline-dark btn-sm mb-2" type="submit" style=" width:100%;">
               Add To Cart
               </button>
@@ -150,22 +156,9 @@
     </div>
   </div>
   <!-- end produk terbaru -->
-  <!-- tentang toko -->
+ <!-- tentang toko -->
   <hr>
-  <div class="mt-4 px-5">
-    <h5 class="text-center">GoodFance</h5>
-    <p>
-      GoodFance adalah e-commerce baru dari Indonesia yang menjual produk produk tentang fashion. Website made in china
-    </p>
-    <p>
-      Toko adalah demo membangun toko online menggunakan laravel framework. Di dalam demo ini terdapat user bisa menginput data kategori, produk dan transaksi.
-      Lorem, ipsum dolor sit amet consectetur adipisicing elit. Hic laborum aliquam dolorum sequi nulla maiores quos incidunt veritatis numquam suscipit. Cumque dolore rem obcaecati. Eos quod ad non veritatis assumenda.
-    </p>
-    <p class="text-center">
-      <a href="" class="btn btn-outline-secondary">
-        Baca Selengkapnya
-      </a>      
-    </p>
-  </div>
-  <!-- end tentang toko -->
+  <div class="text-center text-white py-1 mt-4" style="background-color: #1e1d1d; margin-left: auto; margin-right: auto;"><p><h4><b>GoodFance</b> Shoes</h4></p></div>
+  
+ <!-- end tentang toko -->
   @endsection

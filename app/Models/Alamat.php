@@ -7,9 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $table = 'order';
+    protected $table = 'alamat';
     protected $fillable = [
+        'user_id',
         'cart_id',
+        'status',
         'nama_penerima',
         'no_tlp',
         'alamat',
@@ -19,6 +21,10 @@ class Order extends Model
         'kelurahan',
         'kodepos',
     ];
+
+    public function user() {
+        return $this->belongsTo('App\Models\User','user_id');
+    }
 
     public function cart() {
         return $this->belongsTo('App\Models\Cart', 'cart_id');

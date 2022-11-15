@@ -41,7 +41,7 @@
         </a>
         <ul class="menu-dropdown" style="width: 190px;">
           <li><a href="{{ route('profile.edit') }}">Account</a></li>
-          <li><a style="padding-top: 2.5px;" href="/admin">Become a seller</a></li>
+          <li><a style="padding-top: 2.5px;" href="{{ url("seller") }}">Seller</a></li>
           <li>
             <a style="padding-top: 2.5px; padding-bottom: 7px;" href="{{ route('logout') }}"
               onclick="event.preventDefault();
@@ -58,7 +58,7 @@
       @endauth
       <!-- Cart -->
       <button type="button" class="btn btn-transparent align-self-center shadow-none mt-2 mt-lg-0 mt-md-0 mt-xl-0">
-        <a class="text-dark fs-5" href="/cart">
+        <a class="text-dark fs-5" href="{{ route('cart.index') }}">
           <i class="fas fa-shopping-cart"></i>
         </a>
       </button>

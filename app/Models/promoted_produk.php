@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\ProdukPromo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -31,6 +32,6 @@ class promoted_produk extends Model
 
     public function promo()
     {
-        return $this->belongsTo(Promo::class, 'promo_id', 'id');
+        return $this->belongsTo(ProdukPromo::class, 'promo_id', 'id');
     }
 }

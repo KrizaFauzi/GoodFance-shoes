@@ -34,8 +34,7 @@
         justify-content: center;
         align-items: center;
         border-bottom: 1px solid #eee;
-        height: 400px;
-        width: 100%;
+
         overflow: hidden;
     }
     .content p{
@@ -91,6 +90,12 @@
         margin: 20px auto;
         border: 1px solid rgba(255,255,255,0.2);
         -webkit-transition: -webkit-filter 500ms;
+    }
+
+    img .img-cover{
+        height: 300px;
+        width: 100%;
+        object-fit: cover;
     }
 
     #zoom {
@@ -149,40 +154,52 @@
             <div class="col-md-6 border-end">	
                 <div class="d-flex flex-column justify-content-center">	
                     <div class="main_image bg-secondary">	
-                        <img src="{{ Storage::url($itemproduk->foto) }}" id="main_product_image" class="img-fluid" width="590">	
+                        <img src="{{ Storage::url($itemproduk->foto) }}" id="main_product_image" class="img-cover" >	
                         <div id="zoom"></div>
                     </div>	
                     <div class="thumbnail_images">	
                         <ul id="thumbnail">	
                             <li>
-                                <img onclick="changeImage(this)" src="{{ Storage::url($itemproduk->foto) }}" width="70">
+                                <img onclick="changeImage(this)" src="{{ Storage::url($itemproduk->foto) }}" width="90">
                             </li>	
                         </ul>	
                     </div>	
                 </div>	
-            </div>	
+            </div>
             <div class="col-md-6 bg-dark text-white">	
                 <div class="p-3 right-side">	
-                    <div class="align-items-center">	
+                    <div class="align-items-center d-flex justify-content-between">	
                         <h3>{{ $itemproduk->nama_produk }}</h3>
+                        <form action="{{ route('wishlist.store') }}" method="post">
+                            @csrf
+                            <input type="hidden" name="produk_id" value={{ $itemproduk->id }}>
+                            <button type="submit" class="btn btn-sm btn-outline-secondary">
+                            @if(isset($itemwishlist) && $itemwishlist)
+                            <i class="fas fa-heart"></i>
+                            @else
+                            <i class="far fa-heart"></i>
+                            @endif
+                            </button>
+                        </form>	
                     </div>
                     <hr class="my-1">
                     <div class="mt-2">
-                        <button class="collapsible"><p class="text-collapse">See more <span><i class="fa-solid fa-chevron-down fs-6"></i></span></p></button>
+                        <button class="collapsible"><p class="text-collapse">Deskripsi <span><i class="fa-solid fa-chevron-down fs-6"></i></span></p></button>
                         <div class="content">
-                            <h6 style="font-size: 16px;" class="fw-bold mt-2">About this Item:</h6>
                             <p class="fw-normal">{{ $itemproduk->deskripsi_produk }}</p>
                         </div>
                     </div>
                     <div class="mt-1">
-                        <h3>{{ $itemproduk->harga }}</h3>	
+                        @if(isset($itemproduk->promoted_produk))
+                                <h3>Rp.{{ number_format($itemproduk->promoted_produk->harga_akhir) }}</h3>	
+                            @else
+                                <h3>Rp.{{ number_format($itemproduk->harga) }}</h3>	
+                        @endif
+                        
                         <div class="ratings d-flex flex-row align-items-center">	
-                            <div class="d-flex flex-row">	
-                                <span class="fa fa-star checked"></span>
-                                <span class="fa fa-star checked"></span>
-                                <span class="fa fa-star checked"></span>
-                                <span class="fa fa-star"></span>
-                                <span class="fa fa-star"></span>
+                            <div>
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <span>5.0</span>
                             </div>	
                         </div>
                     </div>	
@@ -200,35 +217,21 @@
                     </div>	
                     <div class="quantity">
                         <span>Stock = {{ $itemproduk->qty }}</span><br>
-                        <span class="fw-bold">Quantity</span>
-                        <div class="input-group input-group-sm mt-1" style="width: 21.5%;">
-                            <label class="input-group-text" for="inputGroupSelect01">Qty</label>
-                            <select class="form-select" id="inputGroupSelect01">
-                                <option selected value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                            </select>
-                        </div>
                     </div>
-                    <div class="buttons d-flex flex-row mt-5 gap-3">
-                        <form action="{{ route('wishlist.store') }}" method="post">
+                    <div class="buttons d-flex flex-row mt-3 gap-3">
+                        <form action="{{ route('cart.store') }}" method="POST">
                             @csrf
-                            <input type="hidden" name="produk_id" value={{ $itemproduk->id }}>
-                            <button type="submit" class="btn btn-sm btn-outline-secondary">
-                            @if(isset($itemwishlist) && $itemwishlist)
-                            <i class="fas fa-heart"></i> Tambah ke wishlist
-                            @else
-                            <i class="far fa-heart"></i> Tambah ke wishlist
-                            @endif
-                            </button>
-                          </form>	
-                        <a href="{{ URL::to('checkout') }}" class="btn btn-outline-light">
-                            Checkout
-                        </a>
-                        <form action="{{ route('cartdetail.store') }}" method="POST">
-                            @csrf
-                            <input type="hidden" name="produk_id" value={{$itemproduk->id}}>
-                            <button class="btn btn-block btn-primary" type="submit">
+                            <input type="hidden" name="produk_id" value='{{$itemproduk->id}}'>
+                            <input type="hidden" name="seller_id" value='{{$itemproduk->user->id}}'>
+                            <div class="col">
+                                <div class="input-group ">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text rounded-0 rounded-start" id="qty">Qty</span>
+                                    </div>
+                                    <input type="number" class="form-control" name="qty" value="1" min="1" max="{{ $itemproduk->qty }}">
+                                </div>
+                            </div>
+                            <button class="btn btn-block btn-primary mt-3" type="submit">
                             <i class="fa fa-shopping-cart"></i> Tambahkan Ke Keranjang
                             </button>
                         </form>

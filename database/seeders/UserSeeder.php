@@ -16,9 +16,9 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $inputan['name'] = 'Utara';
-        $inputan['email'] = 'utara@gmail.com';//ganti pake emailmu
-        $inputan['password'] = Hash::make('123258');//passwordnya 123258
+        $inputan['name'] = 'Admin';
+        $inputan['email'] = 'admindev@gmail.com';//ganti pake emailmu
+        $inputan['password'] = Hash::make('admindev123');//passwordnya 123258
         $inputan['phone'] = '085852527575';
         $inputan['level'] = 'admin';//kita akan membuat akun atau users in dengan role admin
         User::create($inputan);

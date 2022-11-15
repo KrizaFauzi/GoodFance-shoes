@@ -16,16 +16,18 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        $itemuser = $request->user();//ambil data user
+        $itemuser = $request->user();
         $itemcart = Cart::where('user_id', $itemuser->id)
-                        ->where('status_cart', 'cart')
+                        ->get();
+        $cartTrue = Cart::where('user_id', $itemuser->id)
                         ->first();
-        if ($itemcart) {
+        if (isset($cartTrue) && $cartTrue){
             $data = array('title' => 'Shopping Cart',
                         'itemcart' => $itemcart);
-            return view('cart.index', $data)->with('no', 1);            
+            return view('cart.index', $data)->with('no', 1);
         } else {
-            return abort('404');
+            $data = array('title' => 'Shopping Cart');
+            return view('cart.kosong', $data);
         }
     }
 
@@ -47,7 +49,23 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'produk_id' => 'required',
+            'seller_id' => 'required',
+            'qty' => 'required'
+        ]);
+        $user = $request->user();
+        $cart = Cart::where('user_id', $user->id)->where('produk_id', $request->produk_id)->first();
+        if($cart){
+            $total = $cart->qty + $request->qty;
+            $cart->update(['qty' => $total]);
+            return redirect('cart');
+        }else{
+            $input = $request->all();
+            $input['user_id'] = $user->id;
+            $itemcart = Cart::create($input);
+            return redirect('cart');
+        }
     }
 
     /**
@@ -81,7 +99,28 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $cart = Cart::findOrFail($id);
+        $param = $request->param;
+
+        if ($param == 'tambah') {
+            $stok = (int) $cart->produk->qty;
+            if($cart->qty >= $stok){
+                $tambah = $stok;
+            }else{
+                $tambah = $cart->qty + 1;
+            }
+            $cart->update(['qty' => $tambah]);
+            return back();
+        }
+        if ($param == 'kurang') {
+            if($cart->qty > 1){
+                $kurang = $cart->qty - 1;
+            }else{
+                $kurang = 1;
+            }
+            $cart->update(['qty' => $kurang]);
+            return back();
+        }
     }
 
     /**
@@ -92,13 +131,15 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $cart = Cart::findOrFail($id);
+        $cart->delete();
+        return back();
     }
 
-    public function kosongkan($id) {
-        $itemcart = Cart::findOrFail($id);
-        $itemcart->detail()->delete();//hapus semua item di cart detail
-        $itemcart->updatetotal($itemcart, '-'.$itemcart->subtotal);
+    public function kosongkan(Request $request) {
+        $user = $request->user();
+        $itemcart = Cart::where('user_id', $user->id);
+        $itemcart->delete();
         return back()->with('success', 'Cart berhasil dikosongkan');
     }
 

@@ -115,7 +115,7 @@
                 </tr>
               </thead>
               <tbody>
-                @foreach($itemcart->detail as $detail)
+                @forelse($itemcart as $detail)
                 <tr>
                   <td>
                   {{ $no++ }}
@@ -126,14 +126,24 @@
                   {{ $detail->produk->kode_produk }}
                   </td>
                   <td>
-                  {{ number_format($detail->harga, 2) }}
+                    @if (isset($detail->produk->promoted_produk))
+                      {{ number_format($detail->produk->promoted_produk->harga_akhir) }}
+                      <input id="harga" type="hidden" value="{{ $detail->produk->promoted_produk->harga_akhir }}">
+                    @else
+                      {{ number_format($detail->produk->harga) }}
+                      <input id="harga" type="hidden" value="{{ $detail->produk->harga }}">
+                    @endif
                   </td>
                   <td>
-                  {{ number_format($detail->diskon, 2) }}
+                  @if (isset($detail->produk->promoted_produk->promo))
+                      {{ number_format($detail->produk->promoted_produk->promo->diskon_persen) }}%
+                    @else
+                      0
+                  @endif
                   </td>
                   <td>
                     <div class="btn-group" role="group">
-                      <form action="{{ route('cartdetail.update',$detail->id) }}" method="post">
+                      <form action="{{ route('cart.update',$detail->id) }}" method="post">
                       @method('patch')
                       @csrf()
                         <input type="hidden" name="param" value="kurang">
@@ -142,9 +152,10 @@
                         </button>
                       </form>
                       <button class="btn btn-outline-primary btn-sm" disabled="true">
-                      {{ number_format($detail->qty, 2) }}
+                      {{ number_format($detail->qty) }} 
+                      <input type="hidden" id="qty" value="{{ $detail->qty }}">
                       </button>
-                      <form action="{{ route('cartdetail.update',$detail->id) }}" method="post">
+                      <form action="{{ route('cart.update',$detail->id) }}" method="post">
                       @method('patch')
                       @csrf()
                         <input type="hidden" name="param" value="tambah">
@@ -155,10 +166,15 @@
                     </div>
                   </td>
                   <td>
-                  {{ number_format($detail->subtotal, 2) }}
+                    @if (isset($detail->produk->promoted_produk))
+                      {{ number_format($detail->produk->promoted_produk->harga_akhir * $detail->qty) }}
+                    @else
+                      {{ number_format($detail->produk->harga * $detail->qty) }}
+                    @endif
+                    
                   </td>
                   <td>
-                  <form action="{{ route('cartdetail.destroy', $detail->id) }}" method="post" style="display:inline;">
+                  <form action="{{ route('cart.destroy', $detail->id) }}" method="post" style="display:inline;">
                     @csrf
                     {{ method_field('delete') }}
                     <button type="submit" class="btn btn-sm btn-danger mb-2">
@@ -167,7 +183,9 @@
                   </form>
                   </td>
                 </tr>
-                @endforeach
+                @empty
+                <div>Ups Tidak ada barang di cart kamu</div>
+                @endforelse
               </tbody>
             </table>
           </div>
@@ -178,14 +196,11 @@
           <div class="col-lg-10 col-12">
               <div class="d-flex justify-content-between align-items-center">
                   <div>
-                    <form action="{{ url('kosongkan').'/'.$itemcart->id }}" method="post">
-                      @method('patch')
+                    <form action="{{ route('cart.kosongkan') }}" method="post">
+                      @method('delete')
                       @csrf()
                       <button type="submit" class="btn btn-warning btn-sm px-lg-5 px-1 btn-block">Kosongkan</button>
                     </form>
-                  </div>
-                  <div class="px-md-0 px-1 fs-6" id="footer-font">
-                      <b class="pl-md-4">SUBTOTAL: <span class="pl-md-4">Rp. {{ number_format($detail->subtotal, 2) }}</span></b>
                   </div>
                   <div>
                       <a href="/checkout" class="btn btn-sm btn-info text-dark px-lg-5 px-1">Checkout</a>
@@ -195,7 +210,6 @@
       </div>
   </div>
     @endauth
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
 </body>
 </html>

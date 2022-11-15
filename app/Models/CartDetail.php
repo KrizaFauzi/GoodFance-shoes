@@ -2,32 +2,28 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 class CartDetail extends Model
 {
     protected $table = 'cart_detail';
     protected $fillable = [
-        'produk_id',
         'cart_id',
+        'user_id',
+        'alamat_id',
+        'nama_produk',
+        'nama_pembeli',
+        'nama_seller',
         'qty',
-        'harga',
-        'diskon',
-        'subtotal',
+        'total'
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function cart() {
         return $this->belongsTo('App\Models\Cart', 'cart_id');
-    }
-
-    public function produk() {
-        return $this->belongsTo('App\Models\Produk', 'produk_id');
-    }
-
-    // function untuk update qty, sama subtotal
-    public function updatedetail($itemdetail, $qty, $harga, $diskon) {
-        $this->attributes['qty'] = $itemdetail->qty + $qty;
-        $this->attributes['subtotal'] = $itemdetail->subtotal + ($qty * ($harga - $diskon));
-        self::save();
     }
 }

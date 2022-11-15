@@ -70,6 +70,7 @@ Route::group(['prefix' => 'seller','middleware'=> ['auth','CekLevel:seller']], f
     Route::delete('produkimage/{id}', [\App\Http\Controllers\ProdukController::class,'deleteimage']);
     Route::resource('promo',\App\Http\Controllers\ProdukPromoController::class);
     Route::get('loadprodukasync/{idproduk}/{idpromo}', [\App\Http\Controllers\ProdukController::class,'loadasync']);
+    Route::get('subtotal/{harga}/{qty}', [\App\Http\Controllers\CartController::class,'subtotal']);
 });
 
 Route::group(['middleware'=>'auth'], function() {
@@ -77,6 +78,7 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('proseslaporan', [\App\Http\Controllers\LaporanController::class,'proses']);
     Route::resource('transaksi', \App\Http\Controllers\TransaksiController::class);
     Route::resource('cart', App\Http\Controllers\CartController::class);
+    Route::delete('cart', [App\Http\Controllers\CartController::class, 'kosongkan'])->name('cart.kosongkan');
     Route::resource('cartdetail', App\Http\Controllers\CartDetailController::class);
     Route::resource('alamatpengiriman', \App\Http\Controllers\AlamatPengirimanController::class);
     Route::get('checkout', [\App\Http\Controllers\CartController::class,'checkout']);
