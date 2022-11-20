@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\CartDetail;
+use App\Models\Produk;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\AlamatPengiriman;
 use App\Http\Controllers\Controller;
@@ -18,8 +21,10 @@ class CartController extends Controller
     {
         $itemuser = $request->user();
         $itemcart = Cart::where('user_id', $itemuser->id)
+                        ->where('status', 'cart')
                         ->get();
         $cartTrue = Cart::where('user_id', $itemuser->id)
+                        ->where('status', 'cart')
                         ->first();
         if (isset($cartTrue) && $cartTrue){
             $data = array('title' => 'Shopping Cart',
@@ -51,19 +56,36 @@ class CartController extends Controller
     {
         $this->validate($request, [
             'produk_id' => 'required',
-            'seller_id' => 'required',
-            'qty' => 'required'
+            'seller_id' => 'required'      
         ]);
         $user = $request->user();
-        $cart = Cart::where('user_id', $user->id)->where('produk_id', $request->produk_id)->first();
+        $cart = Cart::where('user_id', $user->id)->where('produk_id', $request->produk_id)->where('status', 'cart')->first();
         if($cart){
-            $total = $cart->qty + $request->qty;
-            $cart->update(['qty' => $total]);
             return redirect('cart');
         }else{
-            $input = $request->all();
+            $input['produk_id'] = $request->produk_id;
             $input['user_id'] = $user->id;
+            $input['seller_id'] = $request->seller_id;
+            $input['status'] = 'cart';
             $itemcart = Cart::create($input);
+            if($itemcart){
+                $this->validate($request, [
+                    'produk_id' => 'required',
+                    'seller_id' => 'required',
+                    'qty' => 'required',
+                    'harga' => 'required'
+                ]);
+                $input2 = $request->all();
+                $produk = Produk::find($request->produk_id);
+                $input2['user_id'] = $user->id;
+                $input2['cart_id'] = $itemcart->id;
+                $input2['nama_produk'] = $produk->nama_produk;
+                $input2['nama_pembeli'] = $user->name;
+                $input2['nama_seller'] = User::find($request->seller_id)->name;
+                $total = (int) $request->harga * $request->qty;
+                $input2['total'] = $total;
+                $cartDetail = CartDetail::create($input2);
+            }
             return redirect('cart');
         }
     }
@@ -99,17 +121,22 @@ class CartController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $cart = Cart::findOrFail($id);
+        $cart = CartDetail::where('cart_id', $id)->first();
         $param = $request->param;
 
         if ($param == 'tambah') {
-            $stok = (int) $cart->produk->qty;
+            $stok = (int) $cart->cart->produk->qty;
             if($cart->qty >= $stok){
                 $tambah = $stok;
             }else{
                 $tambah = $cart->qty + 1;
             }
-            $cart->update(['qty' => $tambah]);
+            if(isset($cart->cart->produk->promoted_produk->harga_akhir)){
+                $total = $tambah * $cart->cart->produk->promoted_produk->harga_akhir;
+            }else{
+                $total = $tambah * $cart->cart->produk->harga;
+            }
+            $cart->update(['qty' => $tambah, 'total' => $total]);
             return back();
         }
         if ($param == 'kurang') {
@@ -118,7 +145,12 @@ class CartController extends Controller
             }else{
                 $kurang = 1;
             }
-            $cart->update(['qty' => $kurang]);
+            if(isset($cart->cart->produk->promoted_produk->harga_akhir)){
+                $total = $kurang * $cart->cart->produk->promoted_produk->harga_akhir;
+            }else{
+                $total = $kurang * $cart->cart->produk->harga;
+            }
+            $cart->update(['qty' => $kurang, 'total' => $total]);
             return back();
         }
     }
@@ -132,6 +164,8 @@ class CartController extends Controller
     public function destroy($id)
     {
         $cart = Cart::findOrFail($id);
+        $cartDetail = CartDetail::where('cart_id', $cart->id);
+        $cartDetail->delete();
         $cart->delete();
         return back();
     }
@@ -139,6 +173,11 @@ class CartController extends Controller
     public function kosongkan(Request $request) {
         $user = $request->user();
         $itemcart = Cart::where('user_id', $user->id);
+        $cart = Cart::where('user_id', $user->id)->get();
+        foreach($cart as $cart){
+            $cartDetail = CartDetail::where('cart_id', $cart->id);
+            $cartDetail->delete();
+        }
         $itemcart->delete();
         return back()->with('success', 'Cart berhasil dikosongkan');
     }

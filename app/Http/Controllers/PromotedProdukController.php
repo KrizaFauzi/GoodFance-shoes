@@ -101,13 +101,26 @@ class PromotedProdukController extends Controller
         $input = $request->all();
         $input['user_id'] = $user->id;
         $promoted_produk->update($input);
+        if($promoted_produk){
+            if( $promoted_produk->produk->cart->where('status', 'cart') != null ){
+                foreach ($promoted_produk->produk->cart->where('status', 'cart') as $cart) {
+                    $cart->CartDetail->update(['harga'=> $promoted_produk->harga_akhir,'total'=> $cart->CartDetail->qty * $promoted_produk->harga_akhir]);
+                }
+            }
+        }
         return redirect()->route('promoted_produk.index')->with('success', 'Data Berhasil Disimpan');
     }
 
     public function destroy($id)
     {
         $promoted_produk = promoted_produk::findOrFail($id);
-        if ($promoted_produk->delete()) {
+        if ($promoted_produk) {
+            if( $promoted_produk->produk->cart->where('status', 'cart') != null ){
+                foreach ($promoted_produk->produk->cart->where('status', 'cart') as $cart) {
+                    $cart->CartDetail->update(['harga'=> $promoted_produk->harga_awal,'total'=> $cart->CartDetail->qty * $promoted_produk->harga_awal]);
+                }
+            }
+            $promoted_produk->delete();
             return back()->with('success', 'Data berhasil Dihapus');
         }else{
             return back()->with('error', 'Data gagal dihapus');

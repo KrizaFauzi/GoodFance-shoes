@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ImageController;
@@ -81,7 +82,7 @@ Route::group(['middleware'=>'auth'], function() {
     Route::delete('cart', [App\Http\Controllers\CartController::class, 'kosongkan'])->name('cart.kosongkan');
     Route::resource('cartdetail', App\Http\Controllers\CartDetailController::class);
     Route::resource('alamatpengiriman', \App\Http\Controllers\AlamatPengirimanController::class);
-    Route::get('checkout', [\App\Http\Controllers\CartController::class,'checkout']);
+    Route::resource('checkout', App\Http\Controllers\CheckoutController::class);
     Route::patch('kosongkan/{id}', [\App\Http\Controllers\CartController::class,'kosongkan']);
     Route::resource('wishlist', App\Http\Controllers\WishlistController::class);
 });

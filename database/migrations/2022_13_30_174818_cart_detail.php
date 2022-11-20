@@ -19,11 +19,12 @@ return new class extends Migration
             $table->foreign('cart_id')->references('id')->on('cart');
             $table->integer("user_id")->unsigned();
             $table->foreign("user_id")->references('id')->on('users');
-            $table->integer("alamat_id")->unsigned();
-            $table->foreign("alamat_id")->references('id')->on('alamat');
+            $table->integer("seller_id")->unsigned();
+            $table->foreign("seller_id")->references('id')->on('users');
             $table->string('nama_produk');
             $table->string('nama_pembeli');
             $table->string('nama_seller');
+            $table->integer('harga');
             $table->integer('qty');
             $table->integer('total');
             $table->timestamps();

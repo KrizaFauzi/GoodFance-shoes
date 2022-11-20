@@ -123,7 +123,11 @@ class ProdukPromoController extends Controller
         $itemuser = $request->user();
         $inputan = $request->all();
         $inputan['user_id'] = $itemuser->id;
-        $itempromo->update($inputan);
+        if($itempromo->promoted_produk->first()){
+            return back()->with('error', 'Hapus dulu produk berpromo di produk promo');
+        }else{
+            $itempromo->update($inputan);
+        }
         return redirect()->route('promo.index')->with('success', 'Data berhasil diupdate');
     }
 

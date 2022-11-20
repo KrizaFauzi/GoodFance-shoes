@@ -41,15 +41,20 @@
                   <td>
                     {{ $pengiriman->no_tlp }}
                   </td>
-                  <td>
-                    <form action="{{ route('alamatpengiriman.update',$pengiriman->id) }}" method="post">
+                  <td  >
+                    <form action="{{ route('alamatpengiriman.update',$pengiriman->id) }}" method="post" style="display:inline;">
                       @method('patch')
                       @csrf()
                       @if($pengiriman->status == 'utama')
-                      <button type="submit" class="btn btn-primary btn-sm" disabled>Set Utama</button>
+                        <button type="submit" class="btn btn-primary btn-sm mr-2 mb-2" disabled>Set Utama</button>
                       @else
-                      <button type="submit" class="btn btn-primary btn-sm">Set Utama</button>
+                        <button type="submit" class="btn btn-primary btn-sm mr-2 mb-2">Set Utama</button>
                       @endif
+                    </form>
+                    <form action="{{ route('alamatpengiriman.destroy', $pengiriman->id) }}" method="post" style="display:inline;">
+                      {{ method_field('delete') }}
+                      @csrf
+                      <button type="submit" class="btn btn-danger btn-sm mr-2 mb-2">Hapus Data</button>
                     </form>
                   </td>
                 </tr>

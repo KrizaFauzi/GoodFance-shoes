@@ -126,13 +126,7 @@
                   {{ $detail->produk->kode_produk }}
                   </td>
                   <td>
-                    @if (isset($detail->produk->promoted_produk))
-                      {{ number_format($detail->produk->promoted_produk->harga_akhir) }}
-                      <input id="harga" type="hidden" value="{{ $detail->produk->promoted_produk->harga_akhir }}">
-                    @else
-                      {{ number_format($detail->produk->harga) }}
-                      <input id="harga" type="hidden" value="{{ $detail->produk->harga }}">
-                    @endif
+                    {{ number_format($detail->CartDetail->harga) }}
                   </td>
                   <td>
                   @if (isset($detail->produk->promoted_produk->promo))
@@ -152,8 +146,8 @@
                         </button>
                       </form>
                       <button class="btn btn-outline-primary btn-sm" disabled="true">
-                      {{ number_format($detail->qty) }} 
-                      <input type="hidden" id="qty" value="{{ $detail->qty }}">
+                          {{ number_format($detail->CartDetail->qty) }}
+                          <input type="hidden" id="qty" value="{{ $detail->CartDetail->qty }}">
                       </button>
                       <form action="{{ route('cart.update',$detail->id) }}" method="post">
                       @method('patch')
@@ -166,12 +160,7 @@
                     </div>
                   </td>
                   <td>
-                    @if (isset($detail->produk->promoted_produk))
-                      {{ number_format($detail->produk->promoted_produk->harga_akhir * $detail->qty) }}
-                    @else
-                      {{ number_format($detail->produk->harga * $detail->qty) }}
-                    @endif
-                    
+                    {{ number_format($detail->CartDetail->total) }}
                   </td>
                   <td>
                   <form action="{{ route('cart.destroy', $detail->id) }}" method="post" style="display:inline;">
@@ -203,7 +192,7 @@
                     </form>
                   </div>
                   <div>
-                      <a href="/checkout" class="btn btn-sm btn-info text-dark px-lg-5 px-1">Checkout</a>
+                      <a href="{{ route('checkout.index') }}" class="btn btn-sm btn-info text-dark px-lg-5 px-1">Checkout</a>
                   </div>
               </div>
           </div>

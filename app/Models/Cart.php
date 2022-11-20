@@ -11,7 +11,7 @@ class Cart extends Model
         'user_id',
         'produk_id',
         'seller_id',
-        'qty'
+        'status'
     ];
 
     public function user() {
@@ -24,5 +24,9 @@ class Cart extends Model
 
     public function seller(){
         return $this->belongsTo('App\Models\User','user_id');
+    }
+
+    public function CartDetail(){
+        return $this->hasOne(CartDetail::class);
     }
 }

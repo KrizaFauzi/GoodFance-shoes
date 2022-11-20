@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Cart;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class produk extends Model
 {
@@ -37,5 +38,9 @@ class produk extends Model
 
     public function promoted_produk(){
         return $this->hasOne(promoted_produk::class,'produk_id','id');
+    } 
+
+    public function cart(){
+        return $this->hasMany(Cart::class);
     }
 }

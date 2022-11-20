@@ -15,12 +15,23 @@ return new class extends Migration
     {
         Schema::create('checkout', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer("produk_id")->unsigned();
+            $table->foreign('produk_id')->references('id')->on('produk');
+            $table->integer("user_id")->unsigned();
+            $table->foreign("user_id")->references('id')->on('users');
+            $table->integer("seller_id")->unsigned();
+            $table->foreign("seller_id")->references('id')->on('users');
+            $table->integer("alamat_id")->unsigned();
+            $table->foreign("alamat_id")->references('id')->on('alamat_pengiriman');
             $table->string('invoice');
             $table->string('nama_pembeli');
             $table->string('nama_seller');
             $table->string('nama_produk');
+            $table->string('alamat');
+            $table->integer('harga');
             $table->integer('qty');
             $table->integer('total');
+            $table->string('status');
             $table->timestamps();
         });
     }

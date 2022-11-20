@@ -11,11 +11,12 @@ class CartDetail extends Model
     protected $fillable = [
         'cart_id',
         'user_id',
-        'alamat_id',
+        'seller_id',
         'nama_produk',
         'nama_pembeli',
         'nama_seller',
         'qty',
+        'harga',
         'total'
     ];
 

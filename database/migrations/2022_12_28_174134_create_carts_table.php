@@ -17,11 +17,11 @@ return new class extends Migration
             $table->increments("id");
             $table->integer("produk_id")->unsigned();
             $table->foreign('produk_id')->references('id')->on('produk');
-            $table->integer('qty');
             $table->integer("user_id")->unsigned();
             $table->foreign("user_id")->references('id')->on('users');
             $table->integer("seller_id")->unsigned();
             $table->foreign("seller_id")->references('id')->on('users');
+            $table->string('status');
             $table->timestamps();
         });
     }

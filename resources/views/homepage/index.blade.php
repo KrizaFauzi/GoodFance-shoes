@@ -84,6 +84,7 @@
                 <input type="hidden" name="produk_id" value={{$promo->produk->id}}>
                 <input type="hidden" name="seller_id" value={{$promo->produk->user->id}}>
                 <input type="hidden" name="qty" value="1">
+                <input type="hidden" name="harga" value="{{ $promo->harga_akhir }}">
                 <button  class="btn btn btn-outline-dark btn-sm mb-2" type="submit" style=" width:100%;">
                 Add To Cart
                 </button>
@@ -145,6 +146,11 @@
               <input type="hidden" name="produk_id" value={{$produk->id}}>
               <input type="hidden" name="seller_id" value={{$produk->user->id}}>
               <input type="hidden" name="qty" value="1">
+              @if (isset($produk->promoted_produk->produk_id))
+              <input type="hidden" name="harga" value="{{ $produk->promoted_produk->harga_akhir }}">
+              @else
+                <input type="hidden" name="harga" value="{{ $produk->harga }}">
+              @endif
               <button  class="btn btn btn-outline-dark btn-sm mb-2" type="submit" style=" width:100%;">
               Add To Cart
               </button>

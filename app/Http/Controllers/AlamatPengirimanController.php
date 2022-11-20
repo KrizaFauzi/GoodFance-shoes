@@ -89,7 +89,7 @@ class AlamatPengirimanController extends Controller
      * @param  \App\Models\AlamatPengiriman  $alamatPengiriman
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AlamatPengiriman $alamatPengiriman)
+    public function update(Request $request, AlamatPengiriman $alamatPengiriman, $id)
     {
         $itemalamatpengiriman = AlamatPengiriman::findOrFail($id);
         $itemalamatpengiriman->update(['status' => 'utama']);
@@ -103,8 +103,10 @@ class AlamatPengirimanController extends Controller
      * @param  \App\Models\AlamatPengiriman  $alamatPengiriman
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AlamatPengiriman $alamatPengiriman)
+    public function destroy(AlamatPengiriman $alamatPengiriman, $id)
     {
-        //
+        $itemalamatpengiriman = AlamatPengiriman::findOrFail($id);
+        $itemalamatpengiriman->delete();
+        return back()->with('success', 'Data alamat dihapus');
     }
 }

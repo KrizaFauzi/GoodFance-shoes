@@ -223,6 +223,7 @@
                             @csrf
                             <input type="hidden" name="produk_id" value='{{$itemproduk->id}}'>
                             <input type="hidden" name="seller_id" value='{{$itemproduk->user->id}}'>
+                            <input type="hidden" name="harga" value={{ $itemproduk->harga }}>
                             <div class="col">
                                 <div class="input-group ">
                                     <div class="input-group-prepend">

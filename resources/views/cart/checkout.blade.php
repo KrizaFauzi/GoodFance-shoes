@@ -1,8 +1,8 @@
 @extends('layouts.template')
 @section('content')
-<div class="container mt-3">
+<div class="container mt-3" style="min-height: 74vh">
   <div class="row">
-    <div class="col col-8">
+    <div class="col">
       @if(count($errors) > 0)
       @foreach($errors->all() as $error)
           <div class="alert alert-warning">{{ $error }}</div>
@@ -21,8 +21,9 @@
       <div class="row mb-2">
         <div class="col col-12 mb-2">
           <div class="card">
-            <div class="card-header">
-              Item
+            <div class="card-header d-flex justify-content-between">
+              <span>Item</span>
+              <a href="{{ route('cart.index') }}">Kembali</a>
             </div>
             <div class="card-body">
               <table class="table table-stripped">
@@ -37,27 +38,31 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach($itemcart->detail as $detail)
+                  @foreach($itemcart as $detail)
                   <tr>
                     <td>
                     {{ $no++ }}
                     </td>
                     <td>
-                    {{ $detail->produk->nama_produk }}
+                    {{ $detail->CartDetail->nama_produk }}
                     <br />
                     {{ $detail->produk->kode_produk }}
                     </td>
                     <td>
-                    {{ number_format($detail->harga, 2) }}
+                    {{ number_format($detail->CartDetail->harga) }}
                     </td>
                     <td>
-                    {{ number_format($detail->diskon, 2) }}
+                    @if (isset($detail->produk->promoted_produk->promo))
+                      {{ number_format($detail->produk->promoted_produk->promo->diskon_persen) }}%
+                    @else
+                      0
+                    @endif
                     </td>
                     <td>
-                    {{ number_format($detail->qty, 2) }}
+                    {{ number_format($detail->CartDetail->qty) }}
                     </td>
                     <td>
-                    {{ number_format($detail->subtotal, 2) }}
+                    {{ number_format($detail->CartDetail->total) }}
                     </td>
                   </tr>
                   @endforeach
@@ -105,57 +110,22 @@
                 </table>
               </div>
             </div>
-            <div class="card-footer">
+            <div class="card-footer d-flex justify-content-between">
               <a href="{{ route('alamatpengiriman.index') }}" class="btn btn-sm btn-primary">
                 Tambah Alamat
               </a>
+              <form action="{{ route('checkout.store') }}" method="post">
+                @csrf
+                <input type="hidden" name="param" value="checkout">
+                <button type="submit" class="btn btn-sm btn-primary">Checkout</button>
+              </form>
             </div>
           </div>
         </div>
       </div>
     </div>
     
-    <div class="col col-4">
-      <form action="{{ route('transaksi.store') }}" method="post">
-        @csrf
-      <div class="card">
-        <div class="card-header">
-          Ringkasan
-        </div>
-        <div class="card-body">
-          <table class="table">
-            <tr>
-              <td>No Invoice</td>
-              <td class="text-right">
-                {{ $itemcart->no_invoice }}
-              </td>
-            </tr>
-            <tr>
-              <td>Subtotal</td>
-              <td class="text-right">
-                {{ number_format($itemcart->subtotal, 2) }}
-              </td>
-            </tr>
-            <tr>
-              <td>Diskon</td>
-              <td class="text-right">
-                {{ number_format($itemcart->diskon, 2) }}
-              </td>
-            </tr>
-            <tr>
-              <td>Total</td>
-              <td class="text-right">
-                {{ number_format($itemcart->total, 2) }}
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="card-footer">
-            <button type="submit" class="btn btn-warning btn-sm btn-block w-100">Buat Pesanan</button>
-        </div>
-      </div>
-    </form>
-    </div>
+    
   </div>
 </div>
 @endsection
