@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\Slideshow;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -18,8 +19,10 @@ class SlideshowController extends Controller
     public function index(Request $request)
     {
         $itemslideshow = Slideshow::paginate(10);
+        $event = Event::all();
         $data = array('title' => 'Dashboard Slideshow',
-                    'itemslideshow' => $itemslideshow);
+                    'itemslideshow' => $itemslideshow,
+                    'event' => $event);
         return view('admin.slideshow.index', $data)->with('no', ($request->input('page', 1) - 1) * 10);
     }
 

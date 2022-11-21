@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
         $inputed['name'] = 'Kriza';
         $inputed['email'] = 'kriz4nafis@gmail.com';
         $inputed['password'] = Hash::make('12345678');
-        $inputed['phone'] = '085852527575';
+        $inputed['phone'] = '081216787339';
         $inputed['level'] = 'seller';
         User::create($inputed);
     }

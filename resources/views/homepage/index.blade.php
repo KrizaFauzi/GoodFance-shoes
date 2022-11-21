@@ -6,21 +6,24 @@
     <div class="carousel-inner">
       @foreach($itemslide as $index => $slide )
           @if($index == 0)
-          <div class="carousel-item active">
-              <img src="{{ \Storage::url($slide->foto) }}" class="d-block w-100" alt="{{ $slide->caption_title }}">
-              <div class="carousel-caption d-none d-md-block">
-                <h5 class="invisible">{{ $slide->caption_title }}</h5>
-                <p class="invisible">{{ $slide->caption_content }}</p>
+            <a href="{{ route('slide.show', $slide->event_id) }}">
+              <div class="carousel-item active">
+                  <img src="{{ \Storage::url($slide->foto) }}" class="d-block w-100" alt="{{ $slide->caption_title }}">
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5 class="invisible">{{ $slide->caption_title }}</h5>
+                  </div>
               </div>
-          </div>
+            </a>
           @else
-          <div class="carousel-item">
-              <img src="{{ \Storage::url($slide->foto) }}" class="d-block w-100" alt="{{ $slide->caption_title }}">
-              <div class="carousel-caption d-none d-md-block">
-                <h5 class="invisible">{{ $slide->caption_title }}</h5>
-                <p class="invisible">{{ $slide->caption_content }}</p>
+            <a href="{{ route('slide.show', $slide->event_id) }}">
+              <div class="carousel-item">
+                  <img src="{{ \Storage::url($slide->foto) }}" class="d-block w-100" alt="{{ $slide->caption_title }}">
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5 class="invisible">{{ $slide->caption_title }}</h5>
+                    <p class="invisible">{{ $slide->caption_content }}</p>
+                  </div>
               </div>
-          </div>
+            </a>
           @endif
           @endforeach    
     </div>

@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Models\Produk; 
 use App\Models\Kategori;
 use App\Models\Wishlist;
 use App\Models\Slideshow;
+use App\Models\DaftarEvent;
 use App\Models\ProdukPromo;
-use App\Models\promoted_produk;
 use Illuminate\Http\Request;
+use App\Models\promoted_produk;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -138,4 +141,18 @@ class HomepageController extends Controller
         return view('homepage.semua_produk', $data);
     }
 
+    public function slide(Request $request, $id){
+        $event = DaftarEvent::where('event_id', $id)->first();
+        if($event){
+            $slideshow = Slideshow::where('event_id', $id)->first();
+            $event = Event::findOrFail($id);
+            if( isset($slideshow->event->promo)){
+                $promo = $slideshow->event->promo;
+                $data = array('promo' => $promo, 'event' => $event);
+                return view('homepage.slideshow', $data);
+            }
+        }else{
+            return back();
+        }
+    }
 }

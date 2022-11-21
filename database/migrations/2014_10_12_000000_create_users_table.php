@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('level')->default('member');
-            $table->string('phone')->nullable();//no tlp
+            $table->string('phone')->uniqe()->nullable();//no tlp
             $table->string('foto')->nullable();//foto profil
             $table->string('status')->default('aktif');//aktif atau non aktif, customer bisa kita nonaktifkan tanpa menghapus datanya
             $table->rememberToken();

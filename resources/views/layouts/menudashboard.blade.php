@@ -41,13 +41,19 @@
     </li>
     <li class="nav-item has-treeview">
       <a href="#" class="nav-link">
-        <i class="nav-icon fas fa-folder-open"></i>
+        <i class="nav-icon fas fa-calendar"></i>
         <p>
           Event
           <i class="right fas fa-angle-left"></i>
         </p>
       </a>
       <ul class="nav nav-treeview">
+        <li class="nav-item">
+          <a href="{{ route('Event.even') }}" class="nav-link">
+            <i class="far fa-circle nav-icon"></i>
+            <p>Event</p>
+          </a>
+        </li>
         <li class="nav-item">
           <a href="{{ url('seller/events') }}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
@@ -60,21 +66,21 @@
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-shopping-cart"></i>
         <p>
-          Transaksi
+          Order
           <i class="right fas fa-angle-left"></i>
         </p>
       </a>
       <ul class="nav nav-treeview">
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="{{ route('order.orderan') }}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>Active Page</p>
+            <p>Dikirim</p>
           </a>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="{{ route('order.orderanold') }}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
-            <p>Inactive Page</p>
+            <p>Telah diterima pembeli</p>
           </a>
         </li>
       </ul>

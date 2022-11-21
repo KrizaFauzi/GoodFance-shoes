@@ -26,7 +26,7 @@
                   <th width="50px">No</th>
                   <th>Gambar</th>
                   <th>Title</th>
-                  <th>content</th>
+                  <th>Event</th>
                   <th></th>
                 </tr>
               </thead>
@@ -45,7 +45,7 @@
                   {{ $slide->caption_title }}
                   </td>
                   <td>
-                  {{ $slide->caption_content }}
+                  {{ $slide->event_id }}
                   </td>
                   <td>
                     <form action="{{ route('slideshow.destroy', $slide->id) }}" method="post" style="display:inline;">
@@ -78,8 +78,13 @@
                   <input type="text" name="caption_title" class="form-control">
                 </div>
                 <div class="form-group">
-                  <label for="caption_content">Content</label>
-                  <textarea name="caption_content" id="caption_content" rows="3" class="form-control"></textarea>
+                  <label for="event_id">Event</label>
+                  <select name="event_id" id="event_id" class="form-control">
+                      <option value="">Pilih Event</option>
+                      @foreach($event as $event)
+                      <option value="{{ $event->id }}">{{ $event->nama_event }}</option>            
+                      @endforeach
+                  </select>
                 </div>
                 <div class="form-group">
                   <button class="btn btn-primary">Upload</button>

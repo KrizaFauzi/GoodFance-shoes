@@ -10,6 +10,13 @@
       </a>
     </li>
     <li class="nav-item">
+      <a href="{{ route('kategori.index') }}" class="nav-link">
+        <p>
+          Kategori
+        </p>
+      </a>
+    </li>
+    <li class="nav-item">
       <a href="{{ route('image.index') }}" class="nav-link">
         <p>
           Image

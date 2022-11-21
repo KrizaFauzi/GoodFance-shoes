@@ -55,4 +55,10 @@ class DaftarEventController extends Controller
         return view('daftar_event.all', $data);
     }
 
+    public function event(){
+        $event = Event::where('status', 'publish')->get();
+        $data = array('title' => 'Daftar Event', 'event' => $event);
+        return view('daftar_event.event', $data);
+    }
+
 }

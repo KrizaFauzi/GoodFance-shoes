@@ -17,7 +17,8 @@ class CreateSlideshowsTable extends Migration
             $table->increments('id');
             $table->string('foto');
             $table->string('caption_title')->nullable();
-            $table->string('caption_content')->nullable();
+            $table->integer('event_id')->unsigned();
+            $table->foreign('event_id')->references('id')->on('event')->nullable();
             $table->integer('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

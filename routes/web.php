@@ -39,6 +39,7 @@ Route::get('/', [\App\Http\Controllers\HomePageController::class,'index']);
 Route::get('/about', [\App\Http\Controllers\HomePageController::class,'about']);
 Route::get('/kontak', [\App\Http\Controllers\HomePageController::class,'kontak']);
 Route::get('/category', [\App\Http\Controllers\HomePageController::class,'kategori']);
+Route::get('/slide/{id}', [HomepageController::class, 'slide'])->name('slide.show');
 Route::get('/category/{slug}', [\App\Http\Controllers\HomepageController::class,'kategoribyslug']);
 Route::get('/produk', [\App\Http\Controllers\HomepageController::class,'produk']);
 Route::get('/produk/{id}', [\App\Http\Controllers\HomepageController::class,'produkdetail']);
@@ -64,6 +65,7 @@ Route::group(['prefix' => 'seller','middleware'=> ['auth','CekLevel:seller']], f
     Route::resource('produk', \App\Http\Controllers\ProdukController::class);
     Route::resource('customer', \App\Http\Controllers\CustomerController::class);
     Route::get('events', [\App\Http\Controllers\DaftarEventController::class, 'all']);
+    Route::get('even', [\App\Http\Controllers\DaftarEventController::class, 'event'])->name('Event.even');
     Route::get('daftar_event/{event_id}', [\App\Http\Controllers\DaftarEventController::class, 'index']);
     Route::get('detail_event/{event_id}', [\App\Http\Controllers\DaftarEventController::class, 'detail']);
     Route::post('daftar_event/{event_id}', [\App\Http\Controllers\DaftarEventController::class, 'store']);
@@ -83,6 +85,10 @@ Route::group(['middleware'=>'auth'], function() {
     Route::resource('cartdetail', App\Http\Controllers\CartDetailController::class);
     Route::resource('alamatpengiriman', \App\Http\Controllers\AlamatPengirimanController::class);
     Route::resource('checkout', App\Http\Controllers\CheckoutController::class);
+    Route::post('terima/{id}', [DashboardController::class, 'terima'])->name('order.terima');
+    Route::post('tolak/{id}', [DashboardController::class, 'tolak'])->name('order.tolak');
+    Route::get('order', [DashboardController::class, 'orderan'])->name('order.orderan');
+    Route::get('orderold', [DashboardController::class, 'orderanold'])->name('order.orderanold');
     Route::patch('kosongkan/{id}', [\App\Http\Controllers\CartController::class,'kosongkan']);
     Route::resource('wishlist', App\Http\Controllers\WishlistController::class);
 });

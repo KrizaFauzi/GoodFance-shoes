@@ -10,11 +10,15 @@ class Slideshow extends Model
     protected $fillable = [
         'foto',
         'caption_title',
-        'caption_content',
+        'event_id',
         'user_id',
     ];
 
     public function user() {
         return $this->belongsTo('App\Models\User', 'user_id');
+    }
+
+    public function event(){
+        return $this->belongsTo('App\Models\Event', 'event_id');
     }
 }

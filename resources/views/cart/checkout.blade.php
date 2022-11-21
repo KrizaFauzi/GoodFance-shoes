@@ -116,7 +116,13 @@
               </a>
               <form action="{{ route('checkout.store') }}" method="post">
                 @csrf
-                <input type="hidden" name="param" value="checkout">
+                @if($cart2)
+                  @if ($itemalamatpengiriman)
+                  <input type="hidden" name="alamat" value={{ $itemalamatpengiriman->id }}>
+                  @endif
+                  <input type="hidden" name="cart" value={{ $cart2->id }}>
+                  <input type="hidden" name="param" value="checkout">
+                @endif
                 <button type="submit" class="btn btn-sm btn-primary">Checkout</button>
               </form>
             </div>

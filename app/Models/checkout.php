@@ -12,6 +12,7 @@ class checkout extends Model
     protected $fillable = [
         'invoice',
         'user_id',
+        'cart_id',
         'produk_id',
         'seller_id',
         'alamat_id',
@@ -24,4 +25,12 @@ class checkout extends Model
         'total',
         'status'
     ];
+
+    public function user(){
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function cart(){
+        return $this->belongsTo(Cart::class, 'cart_id');
+    }
 }

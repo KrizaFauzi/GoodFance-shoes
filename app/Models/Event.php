@@ -26,4 +26,8 @@ class Event extends Model
     public function userDaftar(){
         return $this->hasMany(DaftarEvent::class);
     }
+
+    public function promo() {
+        return $this->hasMany(ProdukPromo::class, 'event_id');
+    }
 }

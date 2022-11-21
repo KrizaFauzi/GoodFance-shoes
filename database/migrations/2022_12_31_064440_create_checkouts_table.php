@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreign('produk_id')->references('id')->on('produk');
             $table->integer("user_id")->unsigned();
             $table->foreign("user_id")->references('id')->on('users');
+            $table->integer("cart_id")->unsigned();
+            $table->foreign("cart_id")->references('id')->on('cart');
             $table->integer("seller_id")->unsigned();
             $table->foreign("seller_id")->references('id')->on('users');
             $table->integer("alamat_id")->unsigned();

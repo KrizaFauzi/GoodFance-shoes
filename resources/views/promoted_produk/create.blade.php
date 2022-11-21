@@ -59,7 +59,6 @@
                     <div class="form-group">
                         <label for="diskon_nominal">Diskon Nominal</label>
                         <input type="text" name="diskon_nominal" id="diskon_nominal" class="form-control" >
-                        
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@
     <div class="d-flex align-items-center justify-content-start">
       <!-- Navbar brand -->
       <a class="navbar-brand mt-lg-0 fw-bold" href="/">
-        GoodFance
+        GoodFance Shoes
       </a>
     </div>
 
@@ -41,7 +41,13 @@
         </a>
         <ul class="menu-dropdown" style="width: 190px;">
           <li><a href="{{ route('profile.edit') }}">Account</a></li>
-          <li><a style="padding-top: 2.5px;" href="{{ url("seller") }}">Seller</a></li>
+          @if( Auth::user()->level == "seller" )
+            <li><a style="padding-top: 2.5px;" href="{{ url("seller") }}">Seller</a></li>
+          @elseif ( Auth::user()->level == "admin" )
+            <li><a style="padding-top: 2.5px;" href="{{ url("admin") }}">Admin</a></li>
+          @else
+            <li><a style="padding-top: 2.5px;" href="#">Member</a></li>
+          @endif
           <li>
             <a style="padding-top: 2.5px; padding-bottom: 7px;" href="{{ route('logout') }}"
               onclick="event.preventDefault();
@@ -60,6 +66,11 @@
       <button type="button" class="btn btn-transparent align-self-center shadow-none mt-2 mt-lg-0 mt-md-0 mt-xl-0">
         <a class="text-dark fs-5" href="{{ route('cart.index') }}">
           <i class="fas fa-shopping-cart"></i>
+        </a>
+      </button>
+      <button type="button" class="btn btn-transparent align-self-center shadow-none mt-2 mt-lg-0 mt-md-0 mt-xl-0">
+        <a class="text-dark fs-5" href="{{ route('wishlist.index') }}">
+          <i class="fas fa-heart"></i>
         </a>
       </button>
     <!-- Right elements -->

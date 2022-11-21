@@ -18,13 +18,17 @@ class CheckoutController extends Controller
         $itemcart = Cart::where('user_id', $itemuser->id)
                         ->where('status', 'cart')
                         ->get();
+        $cart2 = Cart::where('user_id', $itemuser->id)
+                        ->where('status', 'cart')
+                        ->first();
         $itemalamatpengiriman = AlamatPengiriman::where('user_id', $itemuser->id)
                                                 ->where('status', 'utama')
                                                 ->first();
         if ($itemcart) {
             $data = array('title' => 'Checkout',
                         'itemcart' => $itemcart,
-                        'itemalamatpengiriman' => $itemalamatpengiriman);
+                        'itemalamatpengiriman' => $itemalamatpengiriman,
+                        'cart2' => $cart2);
             return view('cart.checkout', $data)->with('no', 1);
         } else {
             return abort('404');
@@ -38,6 +42,10 @@ class CheckoutController extends Controller
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'cart' => 'required',
+            'alamat' => 'required',
+        ]);
         $itemuser = $request->user();
         $itemcart = Cart::where('user_id', $itemuser->id)
                         ->where('status', 'cart')
@@ -45,7 +53,6 @@ class CheckoutController extends Controller
         $itemalamatpengiriman = AlamatPengiriman::where('user_id', $itemuser->id)
                                                 ->where('status', 'utama')
                                                 ->first();
-        
         if( $itemcart != null && $request->param == "checkout"){
             $no_invoice = Checkout::where('user_id', $itemuser->id)->count();
             foreach($itemcart as $cart){
@@ -55,6 +62,7 @@ class CheckoutController extends Controller
                 $month = Carbon::now()->format('m');
                 $year = Carbon::now()->format('Y');
                 $input['invoice'] = 'INV'. "/". $month.$date.$year. "/". $cart->produk->kode_produk . "/" .str_pad(($no_invoice + 1),'3', '0', STR_PAD_LEFT).$itemuser->id;
+                $input['cart_id'] = $cart->id;
                 $input['seller_id'] = $cart->seller_id;
                 $input['alamat_id'] = $itemalamatpengiriman->id;
                 $input['nama_pembeli'] = $cart->CartDetail->nama_pembeli;
