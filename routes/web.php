@@ -38,7 +38,6 @@ use App\Http\Controllers\EventController;
 Route::get('/', [\App\Http\Controllers\HomePageController::class,'index']);
 Route::get('/about', [\App\Http\Controllers\HomePageController::class,'about']);
 Route::get('/kontak', [\App\Http\Controllers\HomePageController::class,'kontak']);
-Route::get('/category', [\App\Http\Controllers\HomePageController::class,'kategori']);
 Route::get('/slide/{id}', [HomepageController::class, 'slide'])->name('slide.show');
 Route::get('/category/{slug}', [\App\Http\Controllers\HomepageController::class,'kategoribyslug']);
 Route::get('/produk', [\App\Http\Controllers\HomepageController::class,'produk']);

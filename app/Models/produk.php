@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Cart;
+use App\Models\wishlist;
+use App\Models\Checkout;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -43,4 +45,13 @@ class produk extends Model
     public function cart(){
         return $this->hasMany(Cart::class);
     }
+
+    public function wishlist(){
+        return $this->hasMany(WishList::class);
+    }
+
+    public function checkout(){
+        return $this->hasMany(Checkout::class);
+    }
+
 }

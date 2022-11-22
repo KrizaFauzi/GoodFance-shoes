@@ -1,6 +1,11 @@
 @extends('layouts.template')
 @section('content')
-<div class="container">
+<style>
+  .contain{
+    min-height: 70vh;
+  }
+</style>
+<div class="contain container">
   <!-- kategori produk -->
   <div class="row mt-4">
     <div class="col col-md-12 col-sm-12 mb-4">

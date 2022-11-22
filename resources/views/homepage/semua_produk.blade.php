@@ -12,6 +12,7 @@
 </style>
 
 <div class="contain container-fluid mt-4">
+  <div style="margin-left: 60px; margin-right: 60px;">
     <h4 class="fw-semibold">Produk</h4>
     <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
         @foreach($itemproduk as $produk)
@@ -57,8 +58,8 @@
           </div>
         </div>
         @endforeach
-        
     </div>
+  </div>
 </div>
 
 @endsection

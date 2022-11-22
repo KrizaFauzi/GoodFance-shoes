@@ -1,7 +1,13 @@
 @extends('layouts.template')
 @section('content')
-<div class="container">
-  <div class="row mt-4">
+<style>
+  .contain{
+    min-height: 73.5vh;
+    max-width: 92vw;
+  }
+</style>
+<div class="contain container-fluid" >
+  <div class="row mt-4 ">
     <div class="col col-lg-3 col-md-3 mb-2">
       <div class="card">
         <div class="card-header">

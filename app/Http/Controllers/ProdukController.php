@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Image;
 use App\Models\Produk;
 use App\Models\Kategori;
+use App\Models\Wishlist;
+use App\Models\CartDetail;
+use App\Models\Checkout;
 use App\Models\ProdukImage;
 use App\Models\ProdukPromo;
 use Illuminate\Support\Str;
@@ -137,20 +141,49 @@ class ProdukController extends Controller
     {
         $itemproduk = Produk::findOrFail($id);
         $produkImage = ProdukImage::where('produk_id', $id)->get();
-        if ($itemproduk) {
-            if($produkImage){
-                foreach($produkImage as $imageProduk) {
-                    Storage::delete($imageProduk->foto);
-                    $itemgambar = Image::where('url','=', $imageProduk->foto)->first();
-                    $itemgambar->delete();
-                    $imageProduk->delete();
-                }
-            }
-            $itemproduk->delete();
-            return back()->with('success', 'Data berhasil dihapus');
-        } else {
+        if (!$itemproduk) {
             return back()->with('error', 'Data gagal dihapus');
         }
+        if($itemproduk->promoted_produk){
+            return back()->with('error', 'Error');
+        }
+        if($itemproduk->checkout->where('status', '!=','Selesai')->first()){
+            return back()->with('error', 'Error');
+        }
+        if($itemproduk->checkout->where('status','Selesai')->first()){
+            foreach($itemproduk->checkout->where('status','Selesai') as $checkout) {
+                $checkout = Checkout::find($checkout->id);
+                $cartD = Cart::where('produk_id', $checkout->produk_id)->first();
+                $cartDetail = CartDetail::where('cart_id', $cartD->id)->first();
+                $checkout->delete();
+                $cartDetail->delete();
+                $cartD->delete();
+            }
+        }
+        if($itemproduk->cart->where('status', 'cart')->first()){
+            foreach($itemproduk->cart->where('status', 'cart') as $cart) {
+                $cartD = Cart::find($cart->id);
+                $cartDetail = CartDetail::where('cart_id', $cart->id)->first();
+                $cartDetail->delete();
+                $cartD->delete();
+            }
+        }
+        if($itemproduk->wishlist){
+            foreach($itemproduk->wishlist as $wishlist) {
+                $wish = Wishlist::where('produk_id', $wishlist->id)->first();
+                $wish->delete();
+            }
+        }
+        if($produkImage){
+            foreach($produkImage as $imageProduk) {
+                Storage::delete($imageProduk->foto);
+                $itemgambar = Image::where('url','=', $imageProduk->foto)->first();
+                $itemgambar->delete();
+                $imageProduk->delete();
+            }
+        }
+        $itemproduk->delete();
+        return back()->with('success', 'Data berhasil dihapus');
     }
     
     public function uploadimage(Request $request) {

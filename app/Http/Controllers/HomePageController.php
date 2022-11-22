@@ -20,7 +20,7 @@ class HomepageController extends Controller
     public function index(Request $request) {
         $itemproduk = Produk::orderBy('created_at', 'desc')->limit(5)->get();
         $itempromo = promoted_produk::orderBy('created_at', 'desc')->limit(5)->get();
-        $itemkategori = Kategori::orderBy('nama_kategori', 'asc')->limit(6)->get();
+        $itemkategori = Kategori::orderBy('nama_kategori', 'asc')->limit(4)->get();
         $itemslide = Slideshow::get();
         $data = array('title' => 'Homepage',
             'itemproduk' => $itemproduk,
@@ -69,15 +69,14 @@ class HomepageController extends Controller
         $itemkategori = Kategori::where('slug_kategori', $slug)
                                 ->where('status', 'publish')
                                 ->first();
-        if ($itemkategori) {
-            $data = array('title' => $itemkategori->nama_kategori,
+        if (!$itemkategori) {
+            return abort('404');
+        }
+        $data = array('title' => $itemkategori->nama_kategori,
                         'itemproduk' => $itemproduk,
                         'listkategori' => $listkategori,
                         'itemkategori' => $itemkategori);
-            return view('homepage.produk', $data)->with('no', ($request->input('page') - 1) * 18);            
-        } else {
-            return abort('404');
-        }
+        return view('homepage.produk', $data)->with('no', ($request->input('page') - 1) * 18);            
     }
 
     public function produk(Request $request) 
@@ -143,16 +142,16 @@ class HomepageController extends Controller
 
     public function slide(Request $request, $id){
         $event = DaftarEvent::where('event_id', $id)->first();
-        if($event){
-            $slideshow = Slideshow::where('event_id', $id)->first();
-            $event = Event::findOrFail($id);
-            if( isset($slideshow->event->promo)){
-                $promo = $slideshow->event->promo;
-                $data = array('promo' => $promo, 'event' => $event);
-                return view('homepage.slideshow', $data);
-            }
-        }else{
+        $slideshow = Slideshow::where('event_id', $id)->first();
+        $event = Event::findOrFail($id);
+        if(!$event){
             return back();
         }
+        if(!$slideshow->event->promo){
+            return back();
+        }
+        $promo = $slideshow->event->promo;
+        $data = array('promo' => $promo, 'event' => $event);
+        return view('homepage.slideshow', $data);
     }
 }

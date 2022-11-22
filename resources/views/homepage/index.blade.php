@@ -104,7 +104,10 @@
   <!-- end produk promo -->
   <!-- produk Terbaru-->
   <div style="margin-left: 50px; margin-right: 50px; margin-top: 30px;">
-    <h4 style="margin-left: 15px;" class="fw-bolder">Terbaru</h4>
+    <div class="d-flex justify-content-between">
+      <h4 style="margin-left: 15px;" class="fw-bolder">Terbaru</h4>
+      <a class="btn btn-link" href="/all">Semua Produk</a>
+    </div>
     <div class="row row-cols-1 row-cols-lg-5 g-2 g-lg-3 ms-2 ms-lg-2 ms-md-2 ms-xl-2">
       @foreach($itemproduk as $produk)
       <div class="col">
