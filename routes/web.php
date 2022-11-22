@@ -84,6 +84,7 @@ Route::group(['middleware'=>'auth'], function() {
     Route::resource('cartdetail', App\Http\Controllers\CartDetailController::class);
     Route::resource('alamatpengiriman', \App\Http\Controllers\AlamatPengirimanController::class);
     Route::resource('checkout', App\Http\Controllers\CheckoutController::class);
+    Route::get('transaksi', [HomepageController::class, 'transaksi'])->name('homepage.transaksi');
     Route::post('terima/{id}', [DashboardController::class, 'terima'])->name('order.terima');
     Route::post('tolak/{id}', [DashboardController::class, 'tolak'])->name('order.tolak');
     Route::get('order', [DashboardController::class, 'orderan'])->name('order.orderan');

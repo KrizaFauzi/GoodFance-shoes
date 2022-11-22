@@ -82,8 +82,9 @@
                   <select name="event_id" id="event_id" class="form-control">
                       <option value="">Pilih Event</option>
                       @foreach($event as $event)
-                      <option value="{{ $event->id }}">{{ $event->nama_event }}</option>            
+                        <option value="{{ $event->id }}">{{ $event->nama_event }}</option>            
                       @endforeach
+                      <option value="0">Other Option</option>  
                   </select>
                 </div>
                 <div class="form-group">

@@ -47,11 +47,11 @@ class produk extends Model
     }
 
     public function wishlist(){
-        return $this->hasMany(WishList::class);
+        return $this->hasMany(Wishlist::class);
     }
 
-    public function checkout(){
-        return $this->hasMany(Checkout::class);
+    public function wish($id, $pid){
+        $wish = Wishlist::where('user_id', $id)->where('produk_id', $pid)->first();
+        return $wish;
     }
-
 }

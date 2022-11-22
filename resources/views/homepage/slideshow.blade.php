@@ -24,7 +24,7 @@
                             </div>
                             <div class="card-body">
                                 <div>
-                                    <p class="card-text">{{ $promoted_produk->produk->nama_produk }}</p>
+                                    <p class="card-text txt">{{ $promoted_produk->produk->nama_produk }}</p>
                                 </div>
                                     <div>
                                     <p class="card-text fw-bold">Harga Diskon</p>

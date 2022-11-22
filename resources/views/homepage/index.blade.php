@@ -1,5 +1,11 @@
 @extends('layouts.template')
 @section('content')
+<style>
+  .top{
+    top: 6px;
+    right: 6px;
+  }
+</style>
 <div style="margin-left: 65px; margin-right: 65px; margin-top: 30px;">
   <!-- carousel -->
   <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
@@ -57,13 +63,32 @@
       <div class="row row-cols-1 row-cols-lg-5 g-2 g-lg-3 ms-2 ms-lg-2 ms-md-2 ms-xl-2">
         @forelse($itempromo as $promo)
         <div class="col">
-          <div class="card" style="height: 415px;">
+          <div class="card position-relative" style="height: 415px;">
+            <div class="position-absolute top">
+              <form action="{{ route('wishlist.store') }}" method="post">
+                @csrf
+                  <input type="hidden" name="produk_id" value={{ $promo->produk->id }}>
+                  <button type="submit" class="btn btn-sm btn-outline-secondary">
+                    @auth
+                      @if($promo->produk->wish(Auth::user()->id, $promo->produk->id))
+                          <i class="fas fa-heart"></i>
+                      @else
+                        <i class="far fa-heart"></i>
+                      @endif
+                    @endauth
+                    @guest
+                      <i class="far fa-heart"></i>
+                    @endguest
+                </button>
+                </button>
+              </form>	
+            </div>
             <div style="height: 190px; max-width: 270px; display: flex; align-items: center; margin-left: auto; margin-right: auto;">
               <img src="{{ Storage::url($promo->produk->foto) }}" class="card-img-top" style="max-height: 190px; width: 100%;" alt="...">
             </div>
             <div class="card-body">
               <div>
-                <p class="card-text">{{ $promo->produk->nama_produk }}</p>
+                <p class="card-text txt">{{ $promo->produk->nama_produk }}</p>
               </div>
               <div>
                 <p class="card-text fw-bold">Harga Diskon</p>
@@ -106,18 +131,38 @@
   <div style="margin-left: 50px; margin-right: 50px; margin-top: 30px;">
     <div class="d-flex justify-content-between">
       <h4 style="margin-left: 15px;" class="fw-bolder">Terbaru</h4>
-      <a class="btn btn-link" href="/all">Semua Produk</a>
+      <a class="btn btn-link align-items-center" href="/all">Semua Produk</a>
     </div>
     <div class="row row-cols-1 row-cols-lg-5 g-2 g-lg-3 ms-2 ms-lg-2 ms-md-2 ms-xl-2">
       @foreach($itemproduk as $produk)
       <div class="col">
-        <div class="card" style="height: 415px;">
+        <div class="card position-relative" style="height: 415px;">
+          <div class="position-absolute top">
+            
+            <form action="{{ route('wishlist.store') }}" method="post">
+              @csrf
+                <input type="hidden" name="produk_id" value={{ $produk->id }}>
+                <button type="submit" class="btn btn-sm btn-outline-secondary">
+                  @auth
+                    @if($produk->wish(Auth::user()->id, $produk->id))
+                        <i class="fas fa-heart"></i>
+                    @else
+                      <i class="far fa-heart"></i>
+                    @endif
+                  @endauth
+                  @guest
+                  <i class="far fa-heart"></i>
+                </button>
+            @endguest
+              </button>
+            </form>
+          </div>
           <div style="height: 190px; max-width: 270px; display: flex; align-items: center; margin-left: auto; margin-right: auto;">
             <img src="{{ Storage::url($produk->foto) }}" class="card-img-top" style="max-height: 190px; width: 100%;" alt="...">
           </div>
           <div class="card-body">
             <div>
-              <p class="card-text">{{ $produk->nama_produk }}</p>
+              <p class="card-text txt">{{ $produk->nama_produk }}</p>
             </div>
             @if (isset($produk->promoted_produk->produk_id))
               @if($produk->id == $produk->promoted_produk->produk_id)

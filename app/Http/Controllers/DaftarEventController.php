@@ -36,7 +36,7 @@ class DaftarEventController extends Controller
     {
         $cekEvent = DaftarEvent::where('user_id', '=', $request->user()->id )->where('event_id', $event_id)->first();
         if ($cekEvent) {
-            return back()->with('error', 'Anda sudah daftar di event ini');
+            return redirect('/seller/even')->with('error', 'Anda sudah daftar di event ini');
         } else {
             $itemuser = $request->user();
             $inputan = $request->all();
@@ -44,7 +44,7 @@ class DaftarEventController extends Controller
             $inputan['user_name'] = $itemuser->name;
             $inputan['event_id'] = $event_id;
             $event = DaftarEvent::create($inputan);
-            return redirect()->back()->with('success', 'Berhasil Daftar Event');
+            return redirect('/seller/even')->with('success', 'Berhasil Daftar Event');
         }
     }
 

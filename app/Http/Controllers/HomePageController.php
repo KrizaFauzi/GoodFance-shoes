@@ -141,9 +141,12 @@ class HomepageController extends Controller
     }
 
     public function slide(Request $request, $id){
+        if($id == null){
+            return back();
+        }
         $event = DaftarEvent::where('event_id', $id)->first();
         $slideshow = Slideshow::where('event_id', $id)->first();
-        $event = Event::findOrFail($id);
+        $event = Event::find($id);
         if(!$event){
             return back();
         }
@@ -153,5 +156,10 @@ class HomepageController extends Controller
         $promo = $slideshow->event->promo;
         $data = array('promo' => $promo, 'event' => $event);
         return view('homepage.slideshow', $data);
+    }
+    
+    public function transaksi(Request $request){
+        $data = array('title' => 'Transaksi');
+        return view('homepage.transaksi', $data);
     }
 }
