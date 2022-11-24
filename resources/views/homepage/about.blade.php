@@ -16,7 +16,9 @@
   </div>
   <div class="row mt-3">
     <div class="col">
-      {!! $about->about !!}
+      @if (isset($about))
+        {!! $about->about !!}
+      @endif
     </div>
   </div>
 </div>
