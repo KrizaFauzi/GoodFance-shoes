@@ -49,4 +49,9 @@ class User extends Authenticatable
     public function user_event(){
         return $this->hasMany(DaftarEvent::class, 'user_id', 'id');
     }
+
+    public function rating($id,$idp){
+        $rate = Rating::where('user_id',$id)->where('produk_id', $idp)->first();
+        return $rate;
+    }
 }

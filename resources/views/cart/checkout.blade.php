@@ -123,6 +123,7 @@
                   <input type="hidden" name="cart" value={{ $cart2->id }}>
                   <input type="hidden" name="param" value="checkout">
                 @endif
+                
                 <button type="submit" class="btn btn-sm btn-primary">Checkout</button>
               </form>
             </div>

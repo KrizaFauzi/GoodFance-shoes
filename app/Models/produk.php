@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use App\Models\Cart;
-use App\Models\wishlist;
+use App\Models\Rating;
 use App\Models\Checkout;
+use App\Models\wishlist;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -44,6 +45,10 @@ class produk extends Model
 
     public function cart(){
         return $this->hasMany(Cart::class);
+    }
+
+    public function rating(){
+        return $this->hasMany(Rating::class, 'produk_id');
     }
 
     public function wishlist(){

@@ -42,6 +42,7 @@
         <ul class="menu-dropdown" style="width: 190px;">
           <li><a href="{{ route('profile.edit') }}">Account</a></li>
           <li><a href="{{ route('homepage.transaksi') }}">Transaksi</a></li>
+          <li><a href="{{ route('homepage.history') }}">History Pembelian</a></li>
           @if( Auth::user()->level == "seller" )
             <li><a style="padding-top: 2.5px;" href="{{ url("seller") }}">Seller</a></li>
           @elseif ( Auth::user()->level == "admin" )

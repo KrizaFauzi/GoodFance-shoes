@@ -30,7 +30,10 @@
                             <input type="text" name="email" id="email" required class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="password">Password</label>
+                            <div class="d-flex justify-content-between">
+                                <label for="password">Password</label>
+                                <a href="{{ route('password.request') }}" class="text-decoration-none">Forget Password?</a>
+                            </div>     
                             <input type="password" name="password" id="password" required class="form-control">
                         </div>
                         <div class="form-group mt-2">

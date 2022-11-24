@@ -38,6 +38,20 @@
       </a>
     </li>
     <li class="nav-item">
+      <a href="{{ route('order.adminOrder') }}" class="nav-link">
+        <p>
+          Order
+        </p>
+      </a>
+    </li>
+    <li class="nav-item">
+      <a href="{{ route('order.ekspedisi') }}" class="nav-link">
+        <p>
+          Barang tiba
+        </p>
+      </a>
+    </li>
+    <li class="nav-item">
       <a href="{{ route('logout') }}"
       class="nav-link"
       onclick="event.preventDefault();

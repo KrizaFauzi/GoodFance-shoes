@@ -16,9 +16,9 @@ class DashboardController extends Controller
         $user = $request->user();
         $produkCount = Produk::where('status','publish')->get()->count();
         $event = Event::where('status', 'publish')->get();
-        $pesanan = Checkout::where('seller_id', $user->id)->where('status', 'Diproses')->get()->count();
-        $orderan = Checkout::where('seller_id', $user->id)->where('status', 'Diproses')->get();
-        $transaksi = Checkout::where('seller_id', $user->id)->where('status', 'Telah Datang')->get()->count();
+        $pesanan = Checkout::where('seller_id', $user->id)->where('status', 'menunggu konfirmasi')->get()->count();
+        $orderan = Checkout::where('seller_id', $user->id)->where('status', 'menunggu konfirmasi')->get();
+        $transaksi = Checkout::where('seller_id', $user->id)->where('status', 'diterima')->get()->count();
         $eventCount = count($event);
         $userCount = User::where('status', 'aktif')->where('level', 'member')->get()->count();
         $sellerCount = User::where('status', 'aktif')->where('level', 'seller')->get()->count();
@@ -32,7 +32,7 @@ class DashboardController extends Controller
 
     public function terima(Request $request, $id){
         $checkout = Checkout::findOrFail($id);
-        $checkout->update(['status' => 'Diterima seller']);
+        $checkout->update(['status' => 'Diproses']);
         return redirect()->route('order.orderan')->with('success', 'Barang diterima');
     }
 
@@ -47,15 +47,41 @@ class DashboardController extends Controller
 
     public function orderan(Request $request){
         $user = $request->user();
-        $orderan = Checkout::where('seller_id', $user->id)->where('status', 'Diterima Seller')->get();
+        $orderan = Checkout::where('seller_id', $user->id)->where('status', 'diproses')->get();
         $data = array('title' => 'Orderan', 'orderan' => $orderan);
         return view('order.orderan', $data)->with('no', ($request->input('page', 1) - 1));
     }
 
-    public function orderanold(){
+    public function orderanold(Request $request){
         $user = $request->user();
-        $orderan = Checkout::where('seller_id', $user->id)->where('status', 'Diterima member')->get();
-        $data = array('title' => 'Orderan', 'orderan' => $orderan);
+        $orderan = Checkout::where('seller_id', $user->id)->where('status', 'diterima')->get();
+        $data = array('title' => 'History Penjualan', 'orderan' => $orderan);
         return view('order.orderanold', $data)->with('no', ($request->input('page', 1) - 1));
+    }
+
+    public function adminOrder(Request $request) {
+        $user = $request->user();
+        $order = Checkout::where('status', 'Diproses')->get();
+        $data = array('title' => 'Order', 'order' => $order);
+        return view('admin.dashboard.order', $data)->with('no', 0);
+    }
+
+    public function ekspedisiOrder(Request $request) {
+        $user = $request->user();
+        $order = Checkout::where('status', 'dikirim')->get();
+        $data = array('title' => 'Order', 'order' => $order);
+        return view('admin.dashboard.ekspedisi', $data)->with('no', 0);
+    }
+
+    public function kirim($id){
+        $checkout = Checkout::findOrFail($id);
+        $checkout->update(['status' => 'dikirim']);
+        return redirect()->route('order.adminOrder')->with('success', 'Barang dikirim');
+    }
+
+    public function tiba($id){
+        $checkout = Checkout::findOrFail($id);
+        $checkout->update(['status' => 'tiba']);
+        return redirect()->route('order.adminOrder')->with('success', 'Barang telah tiba tempat');
     }
 }

@@ -147,17 +147,19 @@ class ProdukController extends Controller
         if($itemproduk->promoted_produk){
             return back()->with('error', 'Error');
         }
-        if($itemproduk->checkout->where('status', '!=','Selesai')->first()){
-            return back()->with('error', 'Error');
-        }
-        if($itemproduk->checkout->where('status','Selesai')->first()){
-            foreach($itemproduk->checkout->where('status','Selesai') as $checkout) {
-                $checkout = Checkout::find($checkout->id);
-                $cartD = Cart::where('produk_id', $checkout->produk_id)->first();
-                $cartDetail = CartDetail::where('cart_id', $cartD->id)->first();
-                $checkout->delete();
-                $cartDetail->delete();
-                $cartD->delete();
+        if($itemproduk->checkout){
+            if($itemproduk->checkout->where('status', '!=','Selesai')->first()){
+                return back()->with('error', 'Error');
+            }
+            if($itemproduk->checkout->where('status','Selesai')->first()){
+                foreach($itemproduk->checkout->where('status','Selesai') as $checkout) {
+                    $checkout = Checkout::find($checkout->id);
+                    $cartD = Cart::where('produk_id', $checkout->produk_id)->first();
+                    $cartDetail = CartDetail::where('cart_id', $cartD->id)->first();
+                    $checkout->delete();
+                    $cartDetail->delete();
+                    $cartD->delete();
+                }
             }
         }
         if($itemproduk->cart->where('status', 'cart')->first()){

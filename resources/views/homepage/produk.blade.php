@@ -88,8 +88,11 @@
                 </div>
               @endif
               <div>
-                <i class="fa-solid fa-star text-warning"></i>
-                <span>5.0</span>
+                @if ($produk->rating)
+                  @for ($x = 0; $x < $produk->rating->avg('rating'); $x++)
+                    <i class="fa-solid fa-star text-warning"></i>
+                  @endfor
+                @endif
               </div>
             </div>
             <form action="{{ route('cart.store') }}" method="POST" class="mx-3" style="display: inline-block;">

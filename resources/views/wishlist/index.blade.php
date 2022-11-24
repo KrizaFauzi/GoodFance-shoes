@@ -16,7 +16,7 @@
     }
 </style>
 
-<div class="contain container-fluid mb-4 mt-4">
+<div class="contain container mb-4 mt-4">
   <h2 class="text-center">Wishlist</h2>
   <div class="row row-cols-2 row-cols-lg-5 g-2 g-lg-3">
     @foreach ($itemwishlist as $wishlist)
@@ -73,8 +73,11 @@
               </div>
             @endif
             <div>
-              <i class="fa-solid fa-star text-warning"></i>
-              <span>5.0</span>
+              @if ($wishlist->produk->rating)
+                @for ($x = 0; $x < $wishlist->produk->rating->avg('rating'); $x++)
+                  <i class="fa-solid fa-star text-warning"></i>
+                @endfor
+              @endif
             </div>
           </div>
           <form action="{{ route('cart.store') }}" method="POST" class="mx-3" style="display: inline-block;">

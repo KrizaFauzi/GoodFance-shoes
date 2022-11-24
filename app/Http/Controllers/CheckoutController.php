@@ -28,7 +28,7 @@ class CheckoutController extends Controller
             $data = array('title' => 'Checkout',
                         'itemcart' => $itemcart,
                         'itemalamatpengiriman' => $itemalamatpengiriman,
-                        'cart2' => $cart2);
+                        'cart2' => $cart2 );
             return view('cart.checkout', $data)->with('no', 1);
         } else {
             return abort('404');
@@ -72,7 +72,7 @@ class CheckoutController extends Controller
                 $input['qty'] = $cart->CartDetail->qty;
                 $input['harga'] = $cart->CartDetail->harga;
                 $input['total'] = $cart->CartDetail->total;
-                $input['status'] = 'Diproses';
+                $input['status'] = 'menunggu konfirmasi';
                 $produk = Produk::findOrFail($cart->produk_id);
                 if($produk->qty == 0){
                     return back()->with('error', 'tidak ada barang');
@@ -81,9 +81,16 @@ class CheckoutController extends Controller
                 $produk->update(['qty' => $produk->qty - $cart->CartDetail->qty]);
                 $cart->update(['status' => 'checkout']);
             }
-            return back()->with('success', 'Checkout berhasil');
+
+            return redirect()->route('homepage.transaksi')->with('success', 'Checkout berhasil');
         }
        return back()->with('error', 'tidak ada barang');
+    }
+
+    public function payment(Request $request){
+       
+
+        return view('homepage.payment');
     }
 
     public function show(checkout $checkout)

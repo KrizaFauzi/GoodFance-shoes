@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
+use App\Models\Checkout;
 use App\Models\Event;
 use App\Models\Produk; 
 use App\Models\Kategori;
 use App\Models\Wishlist;
 use App\Models\Slideshow;
 use App\Models\DaftarEvent;
+use App\Models\ProdukImage;
 use App\Models\ProdukPromo;
+use App\Models\Rating;
 use Illuminate\Http\Request;
 use App\Models\promoted_produk;
 use Illuminate\Support\Facades\DB;
@@ -95,23 +99,24 @@ class HomepageController extends Controller
 
     public function produkdetail($id) 
     {
+        $itemuser = Auth::user();
         $itemproduk = Produk::where('slug_produk', $id)
                             ->where('status', 'publish')
                             ->first();
+        $gambar = ProdukImage::where('produk_id', $itemproduk->id)->get();
+        $rating = Rating::where('produk_id', $itemproduk->id)->get();
+        $ratingCount = $rating->avg('rating');
+        $penilaian = $rating->count();
+        $terjual = Checkout::where('produk_id', $itemproduk->id)->where('status', 'diterima')->count();
         if ($itemproduk) {
-            if (Auth::user()) {//cek kalo user login
-                $itemuser = Auth::user();
-                $itemwishlist = Wishlist::where('produk_id', $itemproduk->id)
-                                        ->where('user_id', $itemuser->id)
-                                        ->first();
-                $data = array('title' => $itemproduk->nama_produk,
-                        'itemproduk' => $itemproduk,
-                        'itemwishlist' => $itemwishlist);
-            } else {
-                $data = array('title' => $itemproduk->nama_produk,
-                            'itemproduk' => $itemproduk);
-            }
-            return view('homepage.produkdetail', $data);            
+            $data = array('title' => $itemproduk->nama_produk,
+                        'itemproduk' => $itemproduk, 
+                        'gambar' => $gambar,
+                        'rating' => $rating,
+                        'ratingCount' => $ratingCount,
+                        'terjual' => $terjual,
+                        'penilaian' => $penilaian);
+            return view('homepage.produkdetail', $data)->with('no', 0) ;
         } else {
             // kalo produk ga ada, jadinya tampil halaman tidak ditemukan (error 404)
             return abort('404');
@@ -159,7 +164,46 @@ class HomepageController extends Controller
     }
     
     public function transaksi(Request $request){
-        $data = array('title' => 'Transaksi');
+        $user = $request->user();
+        $all = Checkout::where('user_id', $user->id)->get();
+        $menunggu = Checkout::where('user_id', $user->id)->where('status', 'menunggu konfirmasi')->get();
+        $diproses = Checkout::where('user_id', $user->id)->where('status', 'Diproses')->get();
+        $dikirim = Checkout::where('user_id', $user->id)->where('status', 'dikirim')->get();
+        $tiba = Checkout::where('user_id', $user->id)->where('status', 'tiba')->get();
+        $dibatalkan = Checkout::where('user_id', $user->id)->where('status', 'dibatalkan')->get();
+        $ditolak = Checkout::where('user_id', $user->id)->where('status', 'ditolak')->get();
+        $data = array('all' => $all, 
+                    'menunggu' => $menunggu,
+                    'diproses' => $diproses,
+                    'dikirim' => $dikirim,
+                    'tiba' => $tiba, 
+                    'dibatalkan' => $dibatalkan,
+                    'ditolak' => $ditolak);
         return view('homepage.transaksi', $data);
+    }
+
+    public function batal(Request $request, $id){
+        $checkout = Checkout::findOrFail($id);
+        $stok = $checkout->cart->Produk;
+        $stok->update(['qty' => $stok->qty +  $checkout->qty]);
+        $checkout->cart->update(['status' => 'dibatalkan']);
+        $checkout->update(['status' => 'dibatalkan']);
+        return back()->with('success', 'Barang dibatalkan');
+    }
+
+    public function diterima(Request $request, $id){
+        $checkout = Checkout::findOrFail($id);
+        $stok = $checkout->cart->Produk;
+        $stok->update(['qty' => $stok->qty +  $checkout->qty]);
+        $checkout->cart->update(['status' => 'diterima']);
+        $checkout->update(['status' => 'diterima']);
+        return back()->with('success', 'Barang Telah Diterima');
+    }
+
+    public function history(Request $request){
+        $user = $request->user();
+        $checkout = Checkout::where('user_id', $user->id)->where('status', 'diterima')->get();
+        $data = array('checkout' => $checkout);
+        return view('homepage.history', $data);
     }
 }

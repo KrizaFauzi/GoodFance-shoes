@@ -172,8 +172,8 @@ class CartController extends Controller
 
     public function kosongkan(Request $request) {
         $user = $request->user();
-        $itemcart = Cart::where('user_id', $user->id);
-        $cart = Cart::where('user_id', $user->id)->get();
+        $itemcart = Cart::where('user_id', $user->id)->where('status','cart');
+        $cart = Cart::where('user_id', $user->id)->where('status','cart')->get();
         foreach($cart as $cart){
             $cartDetail = CartDetail::where('cart_id', $cart->id);
             $cartDetail->delete();

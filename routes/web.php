@@ -41,7 +41,7 @@ Route::get('/kontak', [\App\Http\Controllers\HomePageController::class,'kontak']
 Route::get('/slide/{id}', [HomepageController::class, 'slide'])->name('slide.show');
 Route::get('/category/{slug}', [\App\Http\Controllers\HomepageController::class,'kategoribyslug']);
 Route::get('/produk', [\App\Http\Controllers\HomepageController::class,'produk']);
-Route::get('/produk/{id}', [\App\Http\Controllers\HomepageController::class,'produkdetail']);
+Route::get('/produk/{id}', [\App\Http\Controllers\HomepageController::class,'produkdetail'])->name('produk.detail');
 Route::post('/search',[\App\Http\Controllers\HomepageController::class,'searching']);
 Route::get('/all', [\App\Http\Controllers\HomepageController::class,'allProduk']);
 
@@ -53,6 +53,10 @@ Route::group(['prefix' => 'admin','middleware'=>['auth','CekLevel:admin']], func
     Route::delete('promos/{id}', [\App\Http\Controllers\EventController::class,'destroyIt'])->name('promos.destroy');
     Route::get('image', [\App\Http\Controllers\ImageController::class,'index'])->name('image.index');
     Route::delete('image/{id}', [\App\Http\Controllers\ImageController::class,'destroy'])->name('image.destroy');
+    Route::get('order', [DashboardController::class, 'adminOrder'])->name('order.adminOrder');
+    Route::post('kirim/{id}', [DashboardController::class, 'kirim'])->name('order.kirim');
+    Route::get('ekspedisi', [DashboardController::class, 'ekspedisiOrder'])->name('order.ekspedisi');
+    Route::post('tiba/{id}', [DashboardController::class, 'tiba'])->name('order.tiba');
     Route::resource('slideshow',\App\Http\Controllers\SlideshowController::class);
 });
 
@@ -84,9 +88,14 @@ Route::group(['middleware'=>'auth'], function() {
     Route::resource('cartdetail', App\Http\Controllers\CartDetailController::class);
     Route::resource('alamatpengiriman', \App\Http\Controllers\AlamatPengirimanController::class);
     Route::resource('checkout', App\Http\Controllers\CheckoutController::class);
+    Route::get('/rating/{id}', [\App\Http\Controllers\RatingController::class,'index'])->name('rating.rate');
+    Route::post('/rating/{idp}', [\App\Http\Controllers\RatingController::class,'store'])->name('rating.store');
     Route::get('transaksi', [HomepageController::class, 'transaksi'])->name('homepage.transaksi');
+    Route::get('history', [HomepageController::class, 'history'])->name('homepage.history');
     Route::post('terima/{id}', [DashboardController::class, 'terima'])->name('order.terima');
     Route::post('tolak/{id}', [DashboardController::class, 'tolak'])->name('order.tolak');
+    Route::post('batal/{id}', [HomePageController::class, 'batal'])->name('order.batal');
+    Route::post('diterima/{id}', [HomePageController::class, 'diterima'])->name('order.diterima');
     Route::get('order', [DashboardController::class, 'orderan'])->name('order.orderan');
     Route::get('orderold', [DashboardController::class, 'orderanold'])->name('order.orderanold');
     Route::patch('kosongkan/{id}', [\App\Http\Controllers\CartController::class,'kosongkan']);
@@ -94,10 +103,5 @@ Route::group(['middleware'=>'auth'], function() {
 });
 
 Auth::routes();
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('pay', [CheckoutController::class, 'payment']);
 Route::get('/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
-Route::patch('profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-Route::view('/cart_detail', 'cart_detail');
-Route::view('/account', 'account_set');
-Route::view('/dash', 'new_dash');
-Route::view('/checkout2', 'checkout');
