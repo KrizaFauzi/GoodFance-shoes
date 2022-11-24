@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TokoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LupaPassword;
@@ -45,6 +46,7 @@ Route::get('/produk', [\App\Http\Controllers\HomepageController::class,'produk']
 Route::get('/produk/{id}', [\App\Http\Controllers\HomepageController::class,'produkdetail'])->name('produk.detail');
 Route::post('/search',[\App\Http\Controllers\HomepageController::class,'searching']);
 Route::get('/all', [\App\Http\Controllers\HomepageController::class,'allProduk']);
+Route::get('/toko/{id}', [HomePageController::class, 'toko'])->name('homepage.toko');
 Route::get('forget-password', [LupaPassword::class, 'showForgetPasswordForm'])->name('forget.password.get');
 Route::post('forget-password', [LupaPassword::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
 Route::get('reset-password/{token}', [LupaPassword::class, 'showResetPasswordForm'])->name('reset.password.get');
@@ -83,6 +85,7 @@ Route::group(['prefix' => 'seller','middleware'=> ['auth','CekLevel:seller']], f
     Route::resource('promo',\App\Http\Controllers\ProdukPromoController::class);
     Route::get('loadprodukasync/{idproduk}/{idpromo}', [\App\Http\Controllers\ProdukController::class,'loadasync']);
     Route::get('subtotal/{harga}/{qty}', [\App\Http\Controllers\CartController::class,'subtotal']);
+    Route::resource('toko', TokoController::class);
 });
 
 Route::group(['middleware'=>'auth'], function() {

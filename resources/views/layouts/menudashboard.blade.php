@@ -10,6 +10,14 @@
         </p>
       </a>
     </li>
+    <li class="nav-item">
+      <a href="{{ route('toko.create') }}" class="nav-link">
+        <i class="nav-icon fas fa-user"></i>
+        <p>
+          Toko Profile
+        </p>
+      </a>
+    </li>
     <li class="nav-item has-treeview">
       <a href="#" class="nav-link">
         <i class="nav-icon fas fa-folder-open"></i>
@@ -81,23 +89,6 @@
           <a href="{{ route('order.orderanold') }}" class="nav-link">
             <i class="far fa-circle nav-icon"></i>
             <p>Telah diterima pembeli</p>
-          </a>
-        </li>
-      </ul>
-    </li>
-    <li class="nav-item has-treeview">
-      <a href="" class="nav-link">
-        <i class="nav-icon fas fa-list"></i>
-        <p>
-          Laporan
-          <i class="right fas fa-angle-left"></i>
-        </p>
-      </a>
-      <ul class="nav nav-treeview">
-        <li class="nav-item">
-          <a href="/admin/laporan" class="nav-link">
-            <i class="far fa-circle nav-icon"></i>
-            <p>Penjualan</p>
           </a>
         </li>
       </ul>

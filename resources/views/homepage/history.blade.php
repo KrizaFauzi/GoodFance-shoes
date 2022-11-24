@@ -38,9 +38,16 @@
               </form>
             </div>
             <div style="height: 190px; max-width: 270px; display: flex; align-items: center; margin-left: auto; margin-right: auto;">
-              <img src="{{ Storage::url($produk->foto) }}" class="card-img-top" style="max-height: 190px; width: 100%;" alt="...">
+              <img src="{{ Storage::url($produk->foto) }}" class="card-img-top" style="height: 150px; width: 100%;" alt="...">
             </div>
             <div class="card-body">
+              <div>
+                @if(isset($produk->cart->produk->user->toko->nama_toko))
+                  <a class="text-decoration-none fw-semibold text-dark" href="{{ route('homepage.toko', $produk->cart->produk->user_id) }}">{{ $produk->cart->produk->user->toko->nama_toko }}</a>
+                @else
+                  <p class="fw-semibold text-dark">{{ $produk->cart->produk->user->name }}</p>
+                @endif
+              </div>
               <div>
                 <p class="card-text txt">{{ $produk->nama_produk }}</p>
               </div>

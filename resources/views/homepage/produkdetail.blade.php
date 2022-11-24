@@ -74,7 +74,14 @@
         </div>
         <div class="col-lg-6 col-md-12 col-8" >
             <div class="d-flex justify-content-between">
-                <h6 class="py-4">Category / {{ $itemproduk->kategori->nama_kategori }}</h6>
+                <h6 class="py-4">
+                    @if(isset($itemproduk->user->toko->nama_toko))
+                        <a class="text-decoration-none fw-semibold text-dark" href="{{ route('homepage.toko', $itemproduk->user_id) }}">{{ $itemproduk->user->toko->nama_toko }}</a>
+                    @else
+                        <p class="fw-semibold text-dark">{{ $itemproduk->user->name }}</p>
+                    @endif
+                     / {{ $itemproduk->kategori->nama_kategori }}
+                </h6>
                 <form action="{{ route('wishlist.store') }}" method="post">
                     @csrf
                     <input type="hidden" name="produk_id" value={{ $itemproduk->id }}>

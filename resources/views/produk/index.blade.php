@@ -19,11 +19,6 @@
               <div class="col">
                 <input type="text" name="keyword" id="keyword" class="form-control" placeholder="ketik keyword disini">
               </div>
-              <div class="col-auto">
-                <button class="btn btn-primary">
-                  Cari
-                </button>
-              </div>
             </div>
           </form>
         </div>

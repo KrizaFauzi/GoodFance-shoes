@@ -1,3 +1,9 @@
+<style>
+  .outline{
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  }
+</style>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-white bg-white text-white shadow-none py-2">
   <!-- Container wrapper -->
@@ -5,7 +11,7 @@
     <div class="d-flex align-items-center justify-content-start">
       <!-- Navbar brand -->
       <a class="navbar-brand mt-lg-0 fw-bold" href="/">
-        GoodFance Shoes
+        GoodFance <span class="outline">Shoes</span> 
       </a>
     </div>
 

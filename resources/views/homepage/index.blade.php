@@ -84,9 +84,16 @@
               </form>	
             </div>
             <div style="height: 190px; max-width: 270px; display: flex; align-items: center; margin-left: auto; margin-right: auto;">
-              <img src="{{ Storage::url($promo->produk->foto) }}" class="card-img-top" style="max-height: 190px; width: 100%;" alt="...">
+              <img src="{{ Storage::url($promo->produk->foto) }}" class="card-img-top" style="max-height: 150px; width: 100%;" alt="...">
             </div>
             <div class="card-body">
+              <div>
+                @if(isset($promo->produk->user->toko->nama_toko))
+                  <a class="text-decoration-none fw-semibold text-dark" href="{{ route('homepage.toko', $promo->produk->user_id) }}">{{ $promo->produk->user->toko->nama_toko }}</a>
+                @else
+                  <p class="fw-semibold text-dark">{{ $promo->produk->user->name }}</p>
+                @endif
+              </div>
               <div>
                 <p class="card-text txt">{{ $promo->produk->nama_produk }}</p>
               </div>
@@ -161,9 +168,16 @@
             </form>
           </div>
           <div style="height: 190px; max-width: 270px; display: flex; align-items: center; margin-left: auto; margin-right: auto;">
-            <img src="{{ Storage::url($produk->foto) }}" class="card-img-top" style="max-height: 190px; width: 100%;" alt="...">
+            <img src="{{ Storage::url($produk->foto) }}" class="card-img-top" style="height: 150px; width: 100%;" alt="...">
           </div>
           <div class="card-body">
+            <div>
+              @if(isset($produk->user->toko->nama_toko))
+                <a class="text-decoration-none fw-semibold text-dark" href="{{ route('homepage.toko', $produk->user_id) }}">{{ $produk->user->toko->nama_toko }}</a>
+              @else
+                <p class="fw-semibold text-dark">{{ $produk->user->name }}</p>
+              @endif
+            </div>
             <div>
               <p class="card-text txt">{{ $produk->nama_produk }}</p>
             </div>

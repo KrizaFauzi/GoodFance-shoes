@@ -59,4 +59,6 @@ class produk extends Model
         $wish = Wishlist::where('user_id', $id)->where('produk_id', $pid)->first();
         return $wish;
     }
+
+    
 }

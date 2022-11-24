@@ -6,6 +6,7 @@ use App\Models\About;
 use App\Models\Cart;
 use App\Models\Event;
 use App\Models\Rating;
+use App\Models\Toko;
 use App\Models\Produk; 
 use App\Models\Checkout;
 use App\Models\Kategori;
@@ -158,12 +159,12 @@ class HomepageController extends Controller
             }
         }
         if($min != null){
-            $produk = Produkwhere('nama_produk','LIKE', '%'.$search.'%')
+            $produk = Produk::where('nama_produk','LIKE', '%'.$search.'%')
                             ->Where('harga','>=', (int) $min)
                             ->get();
         }
         if($max != null){
-            $produk = Produkwhere('nama_produk','LIKE', '%'.$search.'%')
+            $produk = Produk::where('nama_produk','LIKE', '%'.$search.'%')
                             ->Where('harga','<=', (int) $max)
                             ->get();              
         }
@@ -239,5 +240,12 @@ class HomepageController extends Controller
         $checkout = Checkout::where('user_id', $user->id)->where('status', 'diterima')->get();
         $data = array('checkout' => $checkout);
         return view('homepage.history', $data);
+    }
+
+    public function toko(Request $request, $id){
+        $toko = Toko::Where('seller_id', $id)->first();
+        $itemproduk = Produk::where('user_id', $toko->seller_id)->orderBy('created_at', 'desc')->get();
+        $data = array('toko' => $toko,'itemproduk' => $itemproduk);
+        Return view('homepage.toko', $data);
     }
 }

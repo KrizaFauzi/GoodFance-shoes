@@ -17,7 +17,7 @@
         <div class="row">
             <div class="col-md-3 border-right">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                        <img class="mt-5 rounded-circle" width="150px" src="{{ asset('img/unknownwn.png') }}">
+                    <img class="mt-5 rounded-circle" width="150px" src="{{ asset('img/unknownwn.png') }}">
                     <span class="font-weight-bold">{{ Auth::user()->name }}</span>
                     <span class="text-black-50">{{ Auth::user()->email }}</span><span> </span>
                 </div>
