@@ -16,6 +16,60 @@
     }
 </style>
 
+
+<!-- As a heading -->
+<nav class="navbar bg-dark shadow py-1">
+  <div class="container-fluid">
+      <div class="">
+          <button class="btn btn-info text-white" style="padding: 3px 10px 3px 10px" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasTop" aria-controls="offcanvasTop">
+              <i class="fa-solid fa-filter me-1"></i>Filter
+          </button>
+
+          <div class="offcanvas offcanvas-top" style="height: 210px;" tabindex="-1" id="offcanvasTop" aria-labelledby="offcanvasTopLabel">
+              <div class="offcanvas-header pb-2">
+                  <h3 class="offcanvas-title fw-bold" id="offcanvasTopLabel">Filter</h3>
+                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+              </div>
+              <hr class="my-0 mb-2">
+              <div class="offcanvas-body pt-0">
+                  <div class="container-fluid ">
+                      <div class="row row-cols-1 row-cols-lg-3 g-2 g-lg-3 ">
+                        <form action="/search" method="POST"  style="display: inline-block; width:100%;">
+                          @csrf
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="col">
+                              <p class="mb-0">Urutkan berdasarkan:</p>
+                              <select name="urutan" class="form-select form-select-sm" aria-label="Default select example">
+                                  <option value="" selected>Terkait</option>
+                                  <option value="Terendah - Tertinggi">Harga: Terendah - Tertinggi</option>
+                                  <option value="Tertinggi - Terendah">Harga: Tertinggi - Terendah</option>
+                              </select>
+                            </div>
+                            <div class="col">
+                              <p class="mb-0">Batas Harga</p>
+                                <div class="row g-2">
+                                    <div class="input-group col">
+                                        <span class="input-group-text bg-white border border-end-0" id="basic-addon1">Rp</span>
+                                        <input name="min" type="number" class="form-control bg-white border border-start-0" placeholder="Min">
+                                    </div>
+                                    <div class="input-group col">
+                                        <span class="input-group-text bg-white border border-end-0" id="basic-addon1">Rp</span>
+                                        <input name="max" type="number" class="form-control bg-white border border-start-0" placeholder="Max">
+                                    </div>
+                                  </div>
+                            </div>
+                          </div>
+                          <input type="hidden" name="search" value="{{ $search }}">
+                          <button type="submit" class="btn btn-info mt-2 w-100 shadow">Submit</button>
+                        </form>                          
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</nav>
+
 <div class="contain container-fluid mt-4 mb-4" >
     <div style="margin-left: 60px; margin-right: 60px;">
         <h4 class="fw-semibold">Hasil Pencarian " {{ $search }} "</h4>

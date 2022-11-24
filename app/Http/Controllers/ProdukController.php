@@ -151,11 +151,13 @@ class ProdukController extends Controller
             if($itemproduk->checkout->where('status', '!=','Selesai')->first()){
                 return back()->with('error', 'Error');
             }
-            if($itemproduk->checkout->where('status','Selesai')->first()){
+            if($itemproduk->checkout->where('status','diterima')->first()){
                 foreach($itemproduk->checkout->where('status','Selesai') as $checkout) {
                     $checkout = Checkout::find($checkout->id);
                     $cartD = Cart::where('produk_id', $checkout->produk_id)->first();
                     $cartDetail = CartDetail::where('cart_id', $cartD->id)->first();
+                    $rating = Rating::where('produk_id', $checkout->produk_id)->first();
+                    $rating->delete();
                     $checkout->delete();
                     $cartDetail->delete();
                     $cartD->delete();

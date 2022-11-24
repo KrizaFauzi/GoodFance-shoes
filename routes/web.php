@@ -7,6 +7,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\LupaPassword;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
@@ -44,6 +45,10 @@ Route::get('/produk', [\App\Http\Controllers\HomepageController::class,'produk']
 Route::get('/produk/{id}', [\App\Http\Controllers\HomepageController::class,'produkdetail'])->name('produk.detail');
 Route::post('/search',[\App\Http\Controllers\HomepageController::class,'searching']);
 Route::get('/all', [\App\Http\Controllers\HomepageController::class,'allProduk']);
+Route::get('forget-password', [LupaPassword::class, 'showForgetPasswordForm'])->name('forget.password.get');
+Route::post('forget-password', [LupaPassword::class, 'submitForgetPasswordForm'])->name('forget.password.post'); 
+Route::get('reset-password/{token}', [LupaPassword::class, 'showResetPasswordForm'])->name('reset.password.get');
+Route::post('reset-password', [LupaPassword::class, 'submitResetPasswordForm'])->name('reset.password.post');
 
 Route::group(['prefix' => 'admin','middleware'=>['auth','CekLevel:admin']], function() {
     Route::get('/', [\App\Http\Controllers\DashboardController::class,'index']);
@@ -58,6 +63,7 @@ Route::group(['prefix' => 'admin','middleware'=>['auth','CekLevel:admin']], func
     Route::get('ekspedisi', [DashboardController::class, 'ekspedisiOrder'])->name('order.ekspedisi');
     Route::post('tiba/{id}', [DashboardController::class, 'tiba'])->name('order.tiba');
     Route::resource('slideshow',\App\Http\Controllers\SlideshowController::class);
+    Route::resource('about',\App\Http\Controllers\AboutController::class);
 });
 
 Route::group(['prefix' => 'seller','middleware'=> ['auth','CekLevel:seller']], function() {

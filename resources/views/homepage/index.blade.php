@@ -103,8 +103,11 @@
                 <span>Rp. {{ number_format($promo->harga_akhir, 2) }}</span>
               </div>
               <div>
-                <i class="fa-solid fa-star text-warning"></i>
-                <span>5.0</span>
+                @if ($promo->produk->rating)
+                  @for ($x = 0; $x < (int) $promo->produk->rating->avg('rating'); $x++)
+                    <i class="fa-solid fa-star text-warning"></i>
+                  @endfor
+                @endif
               </div>
             </div>
             <form action="{{ route('cart.store') }}" method="POST" class="mx-3" style="display: inline-block;">
@@ -189,7 +192,7 @@
             @endif
             <div>
               @if ($produk->rating)
-                @for ($x = 0; $x < $produk->rating->avg('rating'); $x++)
+                @for ($x = 0; $x < (int) $produk->rating->avg('rating'); $x++)
                 <i class="fa-solid fa-star text-warning"></i>
                 @endfor
               @endif

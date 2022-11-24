@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\About;
 use App\Models\Cart;
-use App\Models\Checkout;
 use App\Models\Event;
+use App\Models\Rating;
 use App\Models\Produk; 
+use App\Models\Checkout;
 use App\Models\Kategori;
 use App\Models\Wishlist;
 use App\Models\Slideshow;
+use App\Models\CartDetail;
 use App\Models\DaftarEvent;
 use App\Models\ProdukImage;
 use App\Models\ProdukPromo;
-use App\Models\Rating;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\promoted_produk;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -22,6 +25,7 @@ use Illuminate\Support\Facades\Auth;
 class HomepageController extends Controller
 {
     public function index(Request $request) {
+        $mytime = Carbon::now()->format('y-m-d');
         $itemproduk = Produk::orderBy('created_at', 'desc')->limit(5)->get();
         $itempromo = promoted_produk::orderBy('created_at', 'desc')->limit(5)->get();
         $itemkategori = Kategori::orderBy('nama_kategori', 'asc')->limit(4)->get();
@@ -36,7 +40,8 @@ class HomepageController extends Controller
     }
 
     public function about() {
-        $data = array('title' => 'Tentang Kami');
+        $about = About::first();
+        $data = array('title' => 'Tentang Kami', 'about' => $about);
         return view('homepage.about', $data);
     }
 
@@ -126,14 +131,43 @@ class HomepageController extends Controller
     public function searching(Request $request)
     {
         $search = $request['search'];
-        if ($search != "") {
+        $urutan = $request['urutan'];
+        $min = (int) $request['min'];
+        $max = (int) $request['max'];
+        if ($search == "") {
+            $produk = Produk::all();
+            
+        }
+        if( $search != ''){
             $produk = Produk::where('nama_produk','LIKE', '%'.$search.'%')
                             ->orWhereRelation('kategori','nama_kategori','LIKE', '%'.$search.'%')
                             ->get();
-        } else {
-            $produk = Produk::all();
         }
-        $data = array('produk' => $produk,'search'=> $search);
+        if($urutan != null){
+            if($urutan == "Terendah - Tertinggi"){
+                $produk = Produk::where('nama_produk','LIKE', '%'.$search.'%')
+                            ->orWhereRelation('kategori','nama_kategori','LIKE', '%'.$search.'%')
+                            ->orderBy('harga', 'ASC')
+                            ->get();
+            }
+            if($urutan == "Tertinggi - Terendah"){
+                $produk = Produk::where('nama_produk','LIKE', '%'.$search.'%')
+                                        ->orWhereRelation('kategori','nama_kategori','LIKE', '%'.$search.'%')
+                                        ->orderBy('harga', 'DESC')
+                                        ->get();
+            }
+        }
+        if($min != null){
+            $produk = Produkwhere('nama_produk','LIKE', '%'.$search.'%')
+                            ->Where('harga','>=', (int) $min)
+                            ->get();
+        }
+        if($max != null){
+            $produk = Produkwhere('nama_produk','LIKE', '%'.$search.'%')
+                            ->Where('harga','<=', (int) $max)
+                            ->get();              
+        }
+        $data = array('produk' => $produk, 'search'=> $search);
         return view('homepage.search', $data);
     }
 

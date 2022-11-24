@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('foto')->nullable();//banner produknya
             $table->double('qty', 12, 2)->default(0);
             $table->string('satuan');
-            $table->double('harga', 12, 2)->default(0);
+            $table->integer('harga')->default(0);
             $table->string('status');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('kategori_id')->references('id')->on('kategori');

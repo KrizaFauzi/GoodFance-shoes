@@ -47,8 +47,6 @@
             <li><a style="padding-top: 2.5px;" href="{{ url("seller") }}">Seller</a></li>
           @elseif ( Auth::user()->level == "admin" )
             <li><a style="padding-top: 2.5px;" href="{{ url("admin") }}">Admin</a></li>
-          @else
-            <li><a style="padding-top: 2.5px;" href="#">Member</a></li>
           @endif
           <li>
             <a style="padding-top: 2.5px; padding-bottom: 7px;" href="{{ route('logout') }}"

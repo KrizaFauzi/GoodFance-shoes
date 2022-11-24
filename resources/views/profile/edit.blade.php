@@ -27,8 +27,7 @@
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h4 class="text-right">Profile</h4>
                     </div>
-                    <form method="POST" action="{{ route('profile.update') }}">
-                        @method('patch')
+                    <form>
                         @csrf
                         <div class="form-group row mt-2">
                             <div class="col-md-12">
