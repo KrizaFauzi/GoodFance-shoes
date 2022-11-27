@@ -23,7 +23,11 @@
           <div class="card">
             <div class="card-header d-flex justify-content-between">
               <span>Item</span>
-              <a href="{{ route('cart.index') }}">Kembali</a>
+              <form action="{{ route('cekout.destroy', $oId) }}" method="post">
+                @csrf
+                @method('DELETE')
+                <button class="btn btn-primary btn-sm">Kembali</button>
+              </form>
             </div>
             <div class="card-body">
               <table class="table table-stripped">
@@ -31,6 +35,8 @@
                   <tr>
                     <th>No</th>
                     <th>Produk</th>
+                    <th>Warna</th>
+                    <th>Ukuran</th>
                     <th>Harga</th>
                     <th>Diskon</th>
                     <th>Qty</th>
@@ -47,6 +53,12 @@
                     {{ $detail->CartDetail->nama_produk }}
                     <br />
                     {{ $detail->produk->kode_produk }}
+                    </td>
+                    <td>
+                      {{ $detail->CartDetail->warna }}
+                    </td>
+                    <td>
+                      {{ $detail->CartDetail->ukuran }}
                     </td>
                     <td>
                     {{ number_format($detail->CartDetail->harga) }}
@@ -66,6 +78,16 @@
                     </td>
                   </tr>
                   @endforeach
+                  <tr>
+                    <td>Total </td>
+                    <td>{{ $detail->CartDetail->count() }}  Produk</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{ number_format($detail->qtyTotal('total')) }}</td>
+                    <td>{{ number_format($detail->total('total')) }}</td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -118,6 +140,7 @@
                 @csrf
                 @if($cart2)
                   @if ($itemalamatpengiriman)
+                  <input type="hidden" name="order_id" value="{{ $oId }}">
                   <input type="hidden" name="alamat" value={{ $itemalamatpengiriman->id }}>
                   @endif
                   <input type="hidden" name="cart" value={{ $cart2->id }}>

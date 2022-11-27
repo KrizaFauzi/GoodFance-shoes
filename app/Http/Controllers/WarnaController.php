@@ -7,79 +7,23 @@ use Illuminate\Http\Request;
 
 class WarnaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'seller_id' => 'required',
+            'produk_id' => 'required',
+            'warna' => 'required'
+        ]);
+
+        $input = $request->all();
+        Warna::create($input);
+        return back()->with('success', 'Pilihan Warna Ditambahan');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\warna  $warna
-     * @return \Illuminate\Http\Response
-     */
-    public function show(warna $warna)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\warna  $warna
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(warna $warna)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\warna  $warna
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, warna $warna)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\warna  $warna
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(warna $warna)
-    {
-        //
+        $warna = Warna::find($id);
+        $warna->delete();
+        return back()->with('success', 'Pilihan Warna Dihapus');
     }
 }

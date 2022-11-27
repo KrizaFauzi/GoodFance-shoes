@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use App\Models\Cart;
 use App\Models\CartDetail;
 use App\Models\Produk;
@@ -76,6 +77,15 @@ class CartController extends Controller
                     'harga' => 'required'
                 ]);
                 $input2 = $request->all();
+                if($request->warna != null){
+                    $input2['warna'] = $request->warna;
+                }
+                if($request->ukuran != null){
+                    $input2['ukuran'] = $request->ukuran;
+                }
+                if($request->catatan != null){
+                    $input2['catatan'] = $request->catatan;
+                }
                 $produk = Produk::find($request->produk_id);
                 $input2['user_id'] = $user->id;
                 $input2['cart_id'] = $itemcart->id;

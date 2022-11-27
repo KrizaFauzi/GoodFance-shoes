@@ -37,6 +37,9 @@ class toko extends Model
             }
             $averangeRating = $averangeRating + $produk->rating->avg('rating');
         }
+        if($iteration == 0){
+            return 0;
+        }
         $rating = $averangeRating / $iteration;
         return (int) $rating;
     }

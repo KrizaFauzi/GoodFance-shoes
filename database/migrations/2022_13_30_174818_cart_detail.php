@@ -24,6 +24,9 @@ return new class extends Migration
             $table->string('nama_produk');
             $table->string('nama_pembeli');
             $table->string('nama_seller');
+            $table->string('warna')->nullable();
+            $table->string('ukuran')->nullable();
+            $table->string('catatan')->nullable();
             $table->integer('harga');
             $table->integer('qty');
             $table->integer('total');

@@ -11,6 +11,7 @@ class checkout extends Model
     protected $table = 'checkout';
     protected $fillable = [
         'invoice',
+        'order_id',
         'user_id',
         'cart_id',
         'produk_id',
@@ -32,5 +33,9 @@ class checkout extends Model
 
     public function cart(){
         return $this->belongsTo(Cart::class, 'cart_id');
+    }
+
+    public function order(){
+        return $this->belongsTo(Order::class, 'order_id');
     }
 }

@@ -7,79 +7,23 @@ use Illuminate\Http\Request;
 
 class UkuranController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'seller_id' => 'required',
+            'produk_id' => 'required',
+            'ukuran' => 'required'
+        ]);
+
+        $input = $request->all();
+        ukuran::create($input);
+        return back()->with('success', 'Ukuran Ditambahan');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ukuran  $ukuran
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ukuran $ukuran)
+    public function destroy($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ukuran  $ukuran
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ukuran $ukuran)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ukuran  $ukuran
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ukuran $ukuran)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ukuran  $ukuran
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ukuran $ukuran)
-    {
-        //
+        $ukuran = ukuran::find($id);
+        $ukuran->delete();
+        return back()->with('success', 'Pilihan Ukuran Dihapus');
     }
 }

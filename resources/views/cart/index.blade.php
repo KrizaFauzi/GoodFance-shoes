@@ -82,24 +82,8 @@
 </head>
 <body>
     @include('layouts.menu')
-
-    @guest
-    <div class="mt-2 pb-2 bg-light" style="margin-left: 55px; margin-right: 50px;">
-        <div class="mx-3">
-            <h2 class="pt-3">Shopping Cart</h2>
-            <p class="fw-normal fs-6 fst-italic">Your cart is empty.</p>
-            <hr>
-            <div style="align-items: center;" class="btn-group row row-cols-1 row-cols-lg-2 shadow-none mt-2 mt-lg-0 mt-md-0 mt-xl-0">
-                <a style="width: 200px; font-size: 14px;" href="{{ route('login') }}" class="btn btn-outline-dark btn-sm align-self-center mx-2 mx-lg-3 mx-md-2 mx-xl-3 rounded fw-semibold">Sign in to your account</a>
-                <a style="width: 120px; font-size: 14px;" href="{{ route('register') }}" class="btn btn-dark btn-sm align-self-center mt-1 mt-lg-0 mt-md-0 mt-xl-0 mx-2 mx-lg-0 mx-md-0 mx-xl-0 rounded fw-semibold">Sign up now</a>
-            </div>
-            <hr>
-        </div>
-    </div>
-    @endguest
-    
     @auth
-    <div class="mt-2 pb-2 bg-light" style="margin-left: 55px; margin-right: 50px;">
+    <div class="mt-2 p-2 bg-light" style="margin-left: 55px; margin-right: 50px;">
         <h2 class="pt-3">Shopping Cart</h2>
         <div class="card-body">
             <table class="table table-stripped">
@@ -107,6 +91,8 @@
                 <tr>
                   <th>No</th>
                   <th>Produk</th>
+                  <th>Warna</th>
+                  <th>Ukuran</th>
                   <th>Harga</th>
                   <th>Diskon</th>
                   <th>Qty</th>
@@ -124,6 +110,12 @@
                   {{ $detail->produk->nama_produk }}
                   <br />
                   {{ $detail->produk->kode_produk }}
+                  </td>
+                  <td>
+                    {{ $detail->CartDetail->warna }}
+                  </td>
+                  <td>
+                    {{ $detail->CartDetail->ukuran }}
                   </td>
                   <td>
                     {{ number_format($detail->CartDetail->harga) }}
@@ -192,7 +184,11 @@
                     </form>
                   </div>
                   <div>
-                      <a href="{{ route('checkout.index') }}" class="btn btn-sm btn-info text-dark px-lg-5 px-1">Checkout</a>
+                    <form action="{{ route('cekout.store') }}" method="post">
+                      @csrf
+                        <input type="hidden" name="user_id" value="{{ auth::user()->id }}">
+                        <button type="submit" class="btn btn-sm btn-info text-dark px-lg-5 px-1">Pesan</button>
+                    </form>
                   </div>
               </div>
           </div>

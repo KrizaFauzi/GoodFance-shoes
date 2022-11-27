@@ -78,9 +78,9 @@
                     @if(isset($itemproduk->user->toko->nama_toko))
                         <a class="text-decoration-none fw-semibold text-dark" href="{{ route('homepage.toko', $itemproduk->user_id) }}">{{ $itemproduk->user->toko->nama_toko }}</a>
                     @else
-                        <p class="fw-semibold text-dark">{{ $itemproduk->user->name }}</p>
-                    @endif
-                     / {{ $itemproduk->kategori->nama_kategori }}
+                        <span class="fw-semibold text-dark">{{ $itemproduk->user->name }}</span>
+                    @endif 
+                    / <a class="text-decoration-none text-muted" href="{{ route('search.category',$itemproduk->kategori->slug_kategori) }}">{{ $itemproduk->kategori->nama_kategori }}</a> 
                 </h6>
                 <form action="{{ route('wishlist.store') }}" method="post">
                     @csrf
@@ -128,13 +128,21 @@
             <form action="{{ route('cart.store') }}" method="post">
                 @csrf
                 <div class="d-flex justify-content-start">
-                    <select class="my-2" name="" id="">
+                    <select class="my-2" name="ukuran" id="ukuran">
                         <option>Pilih Ukuran</option>
-                        <option value="">S</option>
+                        <@forelse ($itemproduk->ukuran as $ukuran)
+                            <option value="{{ $ukuran->ukuran }}">{{ $ukuran->ukuran }}</option>
+                        @empty
+                            <option value="">Tidak ada pilihan ukuran</option>
+                        @endforelse
                     </select>
-                    <select class="my-2" name="" id="" style="margin-left: 5px;">
+                    <select class="my-2" name="warna" id="warna" style="margin-left: 5px;">
                         <option>Pilih Warna</option>
-                        <option value="">S</option>
+                        @forelse ($itemproduk->warna as $warna)
+                            <option value="{{ $warna->warna }}">{{ $warna->warna }}</option>
+                        @empty
+                            <option value="">Tidak ada pilihan warna</option>
+                        @endforelse
                     </select>
                 </div>
                 <input type="hidden" name="produk_id" value={{$itemproduk->id}}>

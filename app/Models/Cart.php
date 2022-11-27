@@ -29,4 +29,28 @@ class Cart extends Model
     public function CartDetail(){
         return $this->hasOne(CartDetail::class);
     }
+
+    public function total($param){
+        if($param != 'total'){
+            return 0;
+        }
+        $cart = Cart::where('status', 'cart')->get();
+        $allTotal = 0;
+        foreach($cart as $cart){
+           $allTotal = (int) $allTotal + $cart->CartDetail->total;
+        }
+        return $allTotal;
+    }
+
+    public function qtyTotal($param){
+        if($param != 'total'){
+            return 0;
+        }
+        $cart = Cart::where('status', 'cart')->get();
+        $qty = 0;
+        foreach($cart as $cart){
+           $qty = (int) $qty + $cart->CartDetail->qty;
+        }
+        return $qty;
+    }
 }

@@ -13,8 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ukurans', function (Blueprint $table) {
-            $table->id();
+        Schema::create('ukuran', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('seller_id')->unsigned();
+            $table->foreign('seller_id')->references('id')->on('users');
+            $table->integer('produk_id')->unsigned();
+            $table->foreign('produk_id')->references('id')->on('produk');
+            $table->string('ukuran');
             $table->timestamps();
         });
     }

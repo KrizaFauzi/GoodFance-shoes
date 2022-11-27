@@ -13,13 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('warna', function (Blueprint $table) {
+        Schema::create('order', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('seller_id')->unsigned();
-            $table->foreign('seller_id')->references('id')->on('users');
-            $table->integer('produk_id')->unsigned();
-            $table->foreign('produk_id')->references('id')->on('produk');
-            $table->string('warna');
+            $table->integer('user_id')->unsigned();
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('status');
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('warnas');
+        Schema::dropIfExists('order');
     }
 };

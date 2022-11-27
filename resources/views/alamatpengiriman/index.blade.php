@@ -10,7 +10,7 @@
               Alamat Pengiriman
             </div>
             <div class="col-auto">
-              <a href="{{ URL::to('checkout') }}" class="btn btn-sm btn-warning shadow-sm">
+              <a href="{{ route('cekout.show', $order_id) }}" class="btn btn-sm btn-warning shadow-sm">
                 Tutup
               </a>
             </div>

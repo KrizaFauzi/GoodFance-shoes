@@ -15,6 +15,9 @@ class CartDetail extends Model
         'nama_produk',
         'nama_pembeli',
         'nama_seller',
+        'warna',
+        'ukuran',
+        'catatan',
         'qty',
         'harga',
         'total'

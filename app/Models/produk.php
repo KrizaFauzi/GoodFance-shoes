@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Models\Cart;
 use App\Models\Rating;
 use App\Models\Checkout;
+use App\Models\ukuran;
+use App\Models\Warna;
 use App\Models\wishlist;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -53,6 +55,15 @@ class produk extends Model
 
     public function wishlist(){
         return $this->hasMany(Wishlist::class);
+    }
+
+    
+    public function warna(){
+        return $this->hasMany(Warna::class, 'produk_id');
+    }
+
+    public function ukuran(){
+        return $this->hasMany(ukuran::class, 'produk_id');
     }
 
     public function wish($id, $pid){

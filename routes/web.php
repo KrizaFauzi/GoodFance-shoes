@@ -3,12 +3,15 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\WarnaController;
+use App\Http\Controllers\UkuranController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TokoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\LupaPassword;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ProfileController;
@@ -41,7 +44,7 @@ Route::get('/', [\App\Http\Controllers\HomePageController::class,'index']);
 Route::get('/about', [\App\Http\Controllers\HomePageController::class,'about']);
 Route::get('/kontak', [\App\Http\Controllers\HomePageController::class,'kontak']);
 Route::get('/slide/{id}', [HomepageController::class, 'slide'])->name('slide.show');
-Route::get('/category/{slug}', [\App\Http\Controllers\HomepageController::class,'kategoribyslug']);
+Route::get('/category/{slug}', [\App\Http\Controllers\HomepageController::class,'kategoribyslug'])->name('search.category');
 Route::get('/produk', [\App\Http\Controllers\HomepageController::class,'produk']);
 Route::get('/produk/{id}', [\App\Http\Controllers\HomepageController::class,'produkdetail'])->name('produk.detail');
 Route::post('/search',[\App\Http\Controllers\HomepageController::class,'searching']);
@@ -86,9 +89,14 @@ Route::group(['prefix' => 'seller','middleware'=> ['auth','CekLevel:seller']], f
     Route::get('loadprodukasync/{idproduk}/{idpromo}', [\App\Http\Controllers\ProdukController::class,'loadasync']);
     Route::get('subtotal/{harga}/{qty}', [\App\Http\Controllers\CartController::class,'subtotal']);
     Route::resource('toko', TokoController::class);
+    Route::resource('warna', WarnaController::class);
+    Route::resource('ukuran', UkuranController::class);
+
 });
 
 Route::group(['middleware'=>'auth'], function() {
+    Route::resource('cekout', OrderController::class);
+    Route::resource('checkout', App\Http\Controllers\CheckoutController::class);
     Route::get('laporan', [\App\Http\Controllers\LaporanController::class,'index']);
     Route::get('proseslaporan', [\App\Http\Controllers\LaporanController::class,'proses']);
     Route::resource('transaksi', \App\Http\Controllers\TransaksiController::class);
@@ -96,7 +104,6 @@ Route::group(['middleware'=>'auth'], function() {
     Route::delete('cart', [App\Http\Controllers\CartController::class, 'kosongkan'])->name('cart.kosongkan');
     Route::resource('cartdetail', App\Http\Controllers\CartDetailController::class);
     Route::resource('alamatpengiriman', \App\Http\Controllers\AlamatPengirimanController::class);
-    Route::resource('checkout', App\Http\Controllers\CheckoutController::class);
     Route::get('/rating/{id}', [\App\Http\Controllers\RatingController::class,'index'])->name('rating.rate');
     Route::post('/rating/{idp}', [\App\Http\Controllers\RatingController::class,'store'])->name('rating.store');
     Route::get('transaksi', [HomepageController::class, 'transaksi'])->name('homepage.transaksi');
@@ -109,6 +116,7 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('orderold', [DashboardController::class, 'orderanold'])->name('order.orderanold');
     Route::patch('kosongkan/{id}', [\App\Http\Controllers\CartController::class,'kosongkan']);
     Route::resource('wishlist', App\Http\Controllers\WishlistController::class);
+    
 });
 
 Auth::routes();

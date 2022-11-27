@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\Models\checkout;
 use App\Models\Produk;
-use Illuminate\Support\Carbon;
+use App\Models\checkout;
+use PDF;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use App\Models\AlamatPengiriman;
 use App\Http\Controllers\Controller;
 
@@ -14,30 +15,7 @@ class CheckoutController extends Controller
 {
     public function index(Request $request)
     {
-        $itemuser = $request->user();
-        $itemcart = Cart::where('user_id', $itemuser->id)
-                        ->where('status', 'cart')
-                        ->get();
-        $cart2 = Cart::where('user_id', $itemuser->id)
-                        ->where('status', 'cart')
-                        ->first();
-        $itemalamatpengiriman = AlamatPengiriman::where('user_id', $itemuser->id)
-                                                ->where('status', 'utama')
-                                                ->first();
-        if ($itemcart) {
-            $data = array('title' => 'Checkout',
-                        'itemcart' => $itemcart,
-                        'itemalamatpengiriman' => $itemalamatpengiriman,
-                        'cart2' => $cart2 );
-            return view('cart.checkout', $data)->with('no', 1);
-        } else {
-            return abort('404');
-        }
-    }
-
-    public function create()
-    {
-        //
+         return abort('404');
     }
 
     public function store(Request $request)
@@ -45,6 +23,7 @@ class CheckoutController extends Controller
         $this->validate($request, [
             'cart' => 'required',
             'alamat' => 'required',
+            'order_id' => 'required',
         ]);
         $itemuser = $request->user();
         $itemcart = Cart::where('user_id', $itemuser->id)
@@ -58,6 +37,7 @@ class CheckoutController extends Controller
             foreach($itemcart as $cart){
                 $input['user_id'] = $itemuser->id;
                 $input['produk_id'] = $cart->produk_id;
+                $input['order_id'] = $request->order_id;
                 $date = Carbon::now()->format('d');
                 $month = Carbon::now()->format('m');
                 $year = Carbon::now()->format('Y');
@@ -72,25 +52,44 @@ class CheckoutController extends Controller
                 $input['qty'] = $cart->CartDetail->qty;
                 $input['harga'] = $cart->CartDetail->harga;
                 $input['total'] = $cart->CartDetail->total;
-                $input['status'] = 'menunggu konfirmasi';
+                $input['status'] = 'menunggu pembayaran';
                 $produk = Produk::findOrFail($cart->produk_id);
                 if($produk->qty == 0){
                     return back()->with('error', 'tidak ada barang');
                 }
                 Checkout::create($input);
                 $produk->update(['qty' => $produk->qty - $cart->CartDetail->qty]);
-                $cart->update(['status' => 'checkout']);
+                $cart->update(['status' => 'belum dibayar']);
             }
-
             return redirect()->route('homepage.transaksi')->with('success', 'Checkout berhasil');
         }
        return back()->with('error', 'tidak ada barang');
     }
 
-    public function payment(Request $request){
-       
-
-        return view('homepage.payment');
+    public function payment(Request $request){  
+        $user = $request->user();  
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = 'SB-Mid-server-pUSo2Wg4nhf4hVR1YVO3DS2f';
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
+        
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => rand(),
+                'gross_amount' => 10000,
+            ),
+            'customer_details' => array(
+                'first_name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+            ),
+        );
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+        return view('homepage.payment', ['snapToken' => $snapToken]);
     }
 
     public function show(checkout $checkout)

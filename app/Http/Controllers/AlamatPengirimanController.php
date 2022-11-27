@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AlamatPengiriman;
+use App\Models\Order;
 use Illuminate\Http\Request;
+use App\Models\AlamatPengiriman;
+use App\Http\Controllers\Controller;
 
 class AlamatPengirimanController extends Controller
 {
@@ -15,9 +17,11 @@ class AlamatPengirimanController extends Controller
     public function index(Request $request)
     {
         $itemuser = $request->user();
+        $order_id = Order::where('user_id', $itemuser->id)->orderBy('created_at', 'desc')->first()->id;
         $itemalamatpengiriman = AlamatPengiriman::where('user_id', $itemuser->id)->paginate(10);
         $data = array('title' => 'Alamat Pengiriman',
-                    'itemalamatpengiriman' => $itemalamatpengiriman);
+                    'itemalamatpengiriman' => $itemalamatpengiriman,
+                    'order_id' => $order_id);
         return view('alamatpengiriman.index', $data)->with('no', ($request->input('page', 1) - 1) * 10);
     }
 

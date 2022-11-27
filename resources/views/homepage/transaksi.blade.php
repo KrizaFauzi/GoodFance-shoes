@@ -22,7 +22,7 @@
                 <h3 class="mt-1 fw-semibold">Status</h3>
             </li>
             <li class="nav-item" role="presentation">
-                <button data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true" style="width: 150px; font-size: 13px;" class="btn btn-outline-secondary rounded-3 align-self-center mt-1 mt-lg-1 mt-md-1 mt-xl-1 mx-2 mx-lg-2 mx-md-2 mx-xl-2 rounded">
+                <button data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true" style="width: 150px; font-size: 13px;" class="btn btn-outline-secondary rounded-3 active align-self-center mt-1 mt-lg-1 mt-md-1 mt-xl-1 mx-2 mx-lg-2 mx-md-2 mx-xl-2 rounded">
                     All
                 </button>
             </li>
@@ -61,7 +61,6 @@
 
     <div class="tab-content mt-5" id="pills-tabContent">        
         <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all" tabindex="0">
-            
             <!-- All -->
             <table class="table">
                 <thead>
@@ -93,7 +92,6 @@
                     @endforeach
                 </tbody>
               </table>
-
         </div>
         <div class="tab-pane fade" id="menunggu" role="tabpanel" aria-labelledby="menunggu" tabindex="0">
             

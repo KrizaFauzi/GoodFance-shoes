@@ -9,6 +9,8 @@ use App\Models\Kategori;
 use App\Models\Wishlist;
 use App\Models\CartDetail;
 use App\Models\Checkout;
+use App\Models\warna;
+use App\Models\Ukuran;
 use App\Models\ProdukImage;
 use App\Models\ProdukPromo;
 use Illuminate\Support\Str;
@@ -85,9 +87,13 @@ class ProdukController extends Controller
     {
         $itemproduk = Produk::findOrFail($id);
         $produkImage = ProdukImage::where('produk_id', $id)->get();
+        $warna = Warna::where('produk_id', $id)->get();
+        $ukuran = Ukuran::where('produk_id', $id)->get();
         $data = array('title' => 'Foto Produk',
                 'itemproduk' => $itemproduk, 
-                'produkImage' => $produkImage);
+                'produkImage' => $produkImage, 
+                'warna' => $warna,
+                'ukuran' => $ukuran);
         return view('produk.show', $data);
     }
 
