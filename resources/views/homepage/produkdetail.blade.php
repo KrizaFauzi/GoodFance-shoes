@@ -60,10 +60,24 @@
         min-height: 50vh;
     }
 </style>
+
 <div class="contain container mt-4">
-    <div class="row" >
+    @if($itemproduk->dibeli(Auth::user()->id, $itemproduk->id))
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-dark">
+                    Berikut tampilan produk yang dipesan pada {{ $itemproduk->tanggalDibeli(Auth::user()->id, $itemproduk->id) }}
+                </div>
+            </div>
+        </div>
+    @endif
+    <div class="row mt-3" >
         <div class="col-lg-5 col-md-12 col-4" >
-            <img class="img-fluid w-100 pb-1" id="main-img" src="{{ Storage::url($itemproduk->foto) }}" alt="">
+            @if ($itemproduk->foto)
+                <img class="img-fluid w-100 pb-1" id="main-img" src="{{ Storage::url($itemproduk->foto) }}" alt="">
+            @else
+                <img class="img-fluid w-100 pb-1" id="main-img" src="{{ asset('images/NoImage2.jpg') }}" alt="">
+            @endif
             <div class="small-img-group">
                 @foreach ($gambar as $gambar)
                     <div class="small-img-col">

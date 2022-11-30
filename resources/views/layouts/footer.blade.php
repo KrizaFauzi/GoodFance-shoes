@@ -76,7 +76,7 @@
                   <a style="font-size: 16px;" target="_blank" class="text-decoration-none fw-semibold text-dark" href="/">GoodFance <span style="color: rgb(17, 94, 171)">Bag</span></a>
                 </li>
                 <li>
-                  <a style="font-size: 16px;" target="_blank" class="text-decoration-none fw-semibold text-dark" href="/">GoodFance Dai<span style="color: rgb(82, 215, 29)">ly</span></a>
+                  <a style="font-size: 16px;" target="_blank" class="text-decoration-none fw-semibold text-dark" href="https://ada8-125-166-13-126.ap.ngrok.io/">GoodFance Dai<span style="color: rgb(82, 215, 29)">ly</span></a>
                 </li>
               </ul>
             </div>

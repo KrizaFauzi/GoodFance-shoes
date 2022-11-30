@@ -1,5 +1,8 @@
 @extends('layouts.template')
 @section('content')
+<script type="text/javascript"
+      src="https://app.sandbox.midtrans.com/snap/snap.js"
+      data-client-key="SET_YOUR_CLIENT_KEY_HERE"></script>
 <div class="container mt-3" style="min-height: 74vh">
   <div class="row">
     <div class="col">
@@ -23,11 +26,6 @@
           <div class="card">
             <div class="card-header d-flex justify-content-between">
               <span>Item</span>
-              <form action="{{ route('cekout.destroy', $oId) }}" method="post">
-                @csrf
-                @method('DELETE')
-                <button class="btn btn-primary btn-sm">Kembali</button>
-              </form>
             </div>
             <div class="card-body">
               <table class="table table-stripped">
@@ -44,49 +42,49 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach($itemcart as $detail)
+                  @foreach($checkout as $checkout)
                   <tr>
                     <td>
                     {{ $no++ }}
                     </td>
                     <td>
-                    {{ $detail->CartDetail->nama_produk }}
+                    {{ $checkout->cart->CartDetail->nama_produk }}
                     <br />
-                    {{ $detail->produk->kode_produk }}
+                    {{ $checkout->cart->produk->kode_produk }}
                     </td>
                     <td>
-                      {{ $detail->CartDetail->warna }}
+                      {{ $checkout->cart->CartDetail->warna }}
                     </td>
                     <td>
-                      {{ $detail->CartDetail->ukuran }}
+                      {{ $checkout->cart->CartDetail->ukuran }}
                     </td>
                     <td>
-                    {{ number_format($detail->CartDetail->harga) }}
+                    {{ number_format($checkout->cart->CartDetail->harga) }}
                     </td>
                     <td>
-                    @if (isset($detail->produk->promoted_produk->promo))
-                      {{ number_format($detail->produk->promoted_produk->promo->diskon_persen) }}%
+                    @if (isset($checkout->cart->produk->promoted_produk->promo))
+                      {{ number_format($checkout->cart->produk->promoted_produk->promo->diskon_persen) }}%
                     @else
                       0
                     @endif
                     </td>
                     <td>
-                    {{ number_format($detail->CartDetail->qty) }}
+                    {{ number_format($checkout->cart->CartDetail->qty) }}
                     </td>
                     <td>
-                    {{ number_format($detail->CartDetail->total) }}
+                    {{ number_format($checkout->cart->CartDetail->total) }}
                     </td>
                   </tr>
                   @endforeach
                   <tr>
                     <td>Total </td>
-                    <td>{{ $detail->where('user_id', Auth::user()->id)->where('status', 'cart')->count() }}  Produk</td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
-                    <td>{{ number_format($detail->qtyTotal(Auth::user()->id)) }}</td>
-                    <td>{{ number_format($detail->total(Auth::user()->id)) }}</td>
+                    <td></td>
+                    <td>{{ number_format($checkout->cart->qtyTotalCheckout($order->id, Auth::user()->id)) }}</td>
+                    <td>{{ number_format($checkout->cart->totalCheckout($order->id, Auth::user()->id)) }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -108,23 +106,18 @@
                     </tr>
                   </thead>
                   <tbody>
-                  @if($itemalamatpengiriman)
+                  @if($checkout->pengiriman)
                     <tr>
                       <td>
-                        {{ $itemalamatpengiriman->nama_penerima }}
+                        {{ $checkout->pengiriman->nama_penerima }}
                       </td>
                       <td>
-                        {{ $itemalamatpengiriman->alamat }}<br />
-                        {{ $itemalamatpengiriman->kelurahan}}, {{ $itemalamatpengiriman->kecamatan}}<br />
-                        {{ $itemalamatpengiriman->kota}}, {{ $itemalamatpengiriman->provinsi}} - {{ $itemalamatpengiriman->kodepos}}
+                        {{ $checkout->pengiriman->alamat }}<br />
+                        {{ $checkout->pengiriman->kelurahan}}, {{ $checkout->pengiriman->kecamatan}}<br />
+                        {{ $checkout->pengiriman->kota}}, {{ $checkout->pengiriman->provinsi}} - {{ $checkout->pengiriman->kodepos}}
                       </td>
                       <td>
-                        {{ $itemalamatpengiriman->no_tlp }}
-                      </td>
-                      <td>
-                        <a href="{{ route('alamatpengiriman.index') }}" class="btn btn-success btn-sm">
-                          Ubah Alamat
-                        </a>                        
+                        {{ $checkout->pengiriman->no_tlp }}
                       </td>
                     </tr>
                   @endif
@@ -133,29 +126,38 @@
               </div>
             </div>
             <div class="card-footer d-flex justify-content-between">
-              <a href="{{ route('alamatpengiriman.index') }}" class="btn btn-sm btn-primary">
-                Tambah Alamat
-              </a>
-              <form action="{{ route('checkout.store') }}" method="post">
-                @csrf
-                @if($cart2)
-                  @if ($itemalamatpengiriman)
-                  <input type="hidden" name="order_id" value="{{ $oId }}">
-                  <input type="hidden" name="alamat" value={{ $itemalamatpengiriman->id }}>
-                  @endif
-                  <input type="hidden" name="cart" value={{ $cart2->id }}>
-                  <input type="hidden" name="param" value="checkout">
-                @endif
-                
-                <button type="submit" class="btn btn-sm btn-primary">Checkout</button>
-              </form>
+              <a href="" class="btn btn-danger btn-sm">Batalkan</a>
+              <button type="submit" id="pay-button" class="btn btn-sm btn-primary">Pay</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
-    
   </div>
 </div>
+<form id="payying" action="{{ Route('order.payying', $order->id) }}" method="post">
+@csrf
+<input type="hidden" name="param" value="pay">
+</form>
+<script type="text/javascript">
+    var payButton = document.getElementById('pay-button');
+    var payForm = document.getElementById('payying');
+    payButton.addEventListener('click', function () {
+      window.snap.pay('{{ $snapToken }}', {
+        onSuccess: function(result){
+          alert("payment success!");
+          payForm.submit();
+        },
+        onPending: function(result){
+          alert("wating your payment!");
+        },
+        onError: function(result){
+          alert("payment failed!");
+        },
+        onClose: function(){
+          alert('you closed the popup without finishing the payment');
+        }
+      })
+    });
+  </script>
 @endsection

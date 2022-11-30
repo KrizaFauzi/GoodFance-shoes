@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use App\Models\Cart;
+use App\Models\Order;
 use App\Models\Produk;
 use App\Models\checkout;
-use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\AlamatPengiriman;
@@ -32,6 +33,7 @@ class CheckoutController extends Controller
         $itemalamatpengiriman = AlamatPengiriman::where('user_id', $itemuser->id)
                                                 ->where('status', 'utama')
                                                 ->first();
+        Order::find($request->order_id)->update(['status' => 'menunggu pembayaran']);
         if( $itemcart != null && $request->param == "checkout"){
             $no_invoice = Checkout::where('user_id', $itemuser->id)->count();
             foreach($itemcart as $cart){
@@ -64,32 +66,6 @@ class CheckoutController extends Controller
             return redirect()->route('homepage.transaksi')->with('success', 'Checkout berhasil');
         }
        return back()->with('error', 'tidak ada barang');
-    }
-
-    public function payment(Request $request){  
-        $user = $request->user();  
-        // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = 'SB-Mid-server-pUSo2Wg4nhf4hVR1YVO3DS2f';
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = false;
-        // Set sanitization on (default)
-        \Midtrans\Config::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
-        \Midtrans\Config::$is3ds = true;
-        
-        $params = array(
-            'transaction_details' => array(
-                'order_id' => rand(),
-                'gross_amount' => 10000,
-            ),
-            'customer_details' => array(
-                'first_name' => $user->name,
-                'email' => $user->email,
-                'phone' => $user->phone,
-            ),
-        );
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
-        return view('homepage.payment', ['snapToken' => $snapToken]);
     }
 
     public function show(checkout $checkout)

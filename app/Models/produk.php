@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Models\Cart;
-use App\Models\Rating;
-use App\Models\Checkout;
-use App\Models\ukuran;
 use App\Models\Warna;
+use App\Models\Rating;
+use App\Models\ukuran;
+use App\Models\Checkout;
 use App\Models\wishlist;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -71,5 +72,24 @@ class produk extends Model
         return $wish;
     }
 
-    
+    public function dibeli($uId, $pId){
+        $checkout = Checkout::where('user_id', $uId)->where('produk_id', $pId)->orderBy('created_at', 'DESC')->first();
+        if($checkout == null){
+            return false;
+        }
+        $tanggalDipesan =  date_format($checkout->created_at, "Y/m/d");
+        $thenDate = date("Y/m/d", strtotime($tanggalDipesan. ' + 3 days'));
+        $mytime = Carbon::now()->format('Y/m/d');
+        if($mytime > $thenDate){
+            return false;
+        }
+        return true;
+    }
+
+    public function tanggalDibeli($uId, $pId){
+        $checkout = Checkout::where('user_id', $uId)->where('produk_id', $pId)->orderBy('created_at', 'DESC')->first();
+        $tanggalDipesan =  date_format($checkout->created_at, "d-m-Y");
+        return $tanggalDipesan;
+    }
+
 }

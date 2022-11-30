@@ -116,6 +116,8 @@ Route::group(['middleware'=>'auth'], function() {
     Route::get('orderold', [DashboardController::class, 'orderanold'])->name('order.orderanold');
     Route::patch('kosongkan/{id}', [\App\Http\Controllers\CartController::class,'kosongkan']);
     Route::resource('wishlist', App\Http\Controllers\WishlistController::class);
+    Route::get('pay/{id}', [OrderController::class, 'pay'])->name('order.pay');
+    Route::post('payyed/{id}', [Ordercontroller::class, 'payyed'])->name('order.payying');
     
 });
 

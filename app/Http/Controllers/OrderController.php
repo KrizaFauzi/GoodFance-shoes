@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\checkout;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use App\Models\AlamatPengiriman;
@@ -69,5 +70,56 @@ class OrderController extends Controller
         $order = Order::find($id);
         $order->delete();
         return redirect()->route('cart.index');
+    }
+
+    public function pay(Request $request, $id)
+    {
+        $user = $request->user(); 
+        $order = Order::find($id);
+        if(!$order){
+            return redirect()->back();
+        }
+        
+        $checkout = Checkout::where('order_id', $order->id)->where('user_id', $user->id)->where('status', 'menunggu pembayaran')->get();
+        foreach($checkout as $co){
+            $total = $co->cart->totalCheckout($order->id, $user->id);
+        }
+        \Midtrans\Config::$serverKey = 'SB-Mid-server-pUSo2Wg4nhf4hVR1YVO3DS2f';
+        \Midtrans\Config::$isProduction = false;
+        \Midtrans\Config::$isSanitized = true;
+        \Midtrans\Config::$is3ds = true;
+        
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => $order->id.rand(),
+                'gross_amount' => $total,
+            ),
+            'customer_details' => array(
+                'first_name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
+            ),
+        );
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+        $data = array('checkout' => $checkout, 'order' => $order, 'snapToken' => $snapToken);
+        return view('payment.index', $data)->with('no', 1);
+    }
+
+    public function payyed(Request $request, $id){
+        if($request->param != "pay"){
+            return back()->with('error', 'pembayaran error');
+        }
+        $user = $request->user();
+        $order = Order::find($id);
+        $order->update(['status' => 'menunggu konfirmasi']);
+        $checkout = Checkout::where('order_id', $order->id)->get();
+        foreach($checkout as $checkout) {
+            $checkout->update(['status' => 'menunggu konfirmasi']);
+            $cart = Cart::where('produk_id',$checkout->produk_id)->where('user', $user->id);
+            foreach($cart as $cart){
+                $cart->update(['status' => 'menunggu konfirmasi']);
+            }
+        }
+    return redirect()->route('homepage.transaksi');    
     }
 }

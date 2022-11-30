@@ -43,7 +43,11 @@
                                 </form>
                               </div>
                             <div style="height: 190px; max-width: 270px; display: flex; align-items: center; margin-left: auto; margin-right: auto;">
-                                <img src="{{ Storage::url($promoted_produk->produk->foto) }}" class="card-img-top" style="height: 150px; width: 100%;" alt="...">
+                                @if ($promoted_produk->produk->foto)
+                                    <img src="{{ Storage::url($promoted_produk->produk->foto) }}" class="card-img-top" style="height: 150px; width: 100%;" alt="...">
+                                @else
+                                    <img src="{{ asset('images/NoImage2.jpg') }}" class="card-img-top" style="height: 150px; width: 100%;" alt="...">
+                                @endif
                             </div>
                             <div class="card-body">
                                 <div>

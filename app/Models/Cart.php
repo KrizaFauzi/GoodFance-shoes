@@ -30,11 +30,8 @@ class Cart extends Model
         return $this->hasOne(CartDetail::class);
     }
 
-    public function total($param){
-        if($param != 'total'){
-            return 0;
-        }
-        $cart = Cart::where('status', 'cart')->get();
+    public function total($uId){
+        $cart = Cart::where('status', 'cart')->where('user_id',$uId)->get();
         $allTotal = 0;
         foreach($cart as $cart){
            $allTotal = (int) $allTotal + $cart->CartDetail->total;
@@ -42,14 +39,29 @@ class Cart extends Model
         return $allTotal;
     }
 
-    public function qtyTotal($param){
-        if($param != 'total'){
-            return 0;
-        }
-        $cart = Cart::where('status', 'cart')->get();
+    public function qtyTotal($uId){
+        $cart = Cart::where('status', 'cart')->where('user_id', $uId)->get();
         $qty = 0;
         foreach($cart as $cart){
            $qty = (int) $qty + $cart->CartDetail->qty;
+        }
+        return $qty;
+    }
+
+    public function totalCheckout($oId, $uId){
+        $checkout = Checkout::where('order_id', $oId)->where('status', 'menunggu pembayaran')->where('user_id', $uId)->get();
+        $allTotal = 0;
+        foreach($checkout as $checkout){
+           $allTotal = (int) $allTotal + $checkout->total;
+        }
+        return $allTotal;
+    }
+
+    public function qtyTotalCheckout($oId, $uId){
+        $checkout = Checkout::where('order_id', $oId)->where('status', 'menunggu pembayaran')->where('user_id', $uId)->get();
+        $qty = 0;
+        foreach($checkout as $checkout){
+           $qty = (int) $qty + $checkout->qty;
         }
         return $qty;
     }

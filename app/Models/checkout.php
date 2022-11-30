@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Cart;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\AlamatPengiriman;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class checkout extends Model
 {
@@ -37,5 +41,9 @@ class checkout extends Model
 
     public function order(){
         return $this->belongsTo(Order::class, 'order_id');
+    }
+
+    public function pengiriman(){
+        return $this->belongsTo(AlamatPengiriman::class,'alamat_id');
     }
 }

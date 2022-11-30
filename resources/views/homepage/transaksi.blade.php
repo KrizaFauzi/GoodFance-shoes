@@ -6,15 +6,24 @@
     }
 </style>
 <div class="contain container">
-    @if ($message = Session::get('error'))
-        <div class="alert alert-warning">
-            <p>{{ $message }}</p>
-        </div>
-    @endif
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
-        </div>
+    <div class="my-3">
+        @if ($message = Session::get('error'))
+            <div class="alert alert-warning">
+                <p>{{ $message }}</p>
+            </div>
+        @endif
+        @if ($message = Session::get('success'))
+            <div class="alert alert-success">
+                <p>{{ $message }}</p>
+            </div>
+        @endif
+    </div>
+    @if (isset($belumDibayar))
+        <a class="text-decoration-none" href="{{ route('order.pay', $belumDibayar->id) }}">
+            <div class="border border-dark border-2 bg-white p-3 rounded text-dark" >
+                Orderan kamu masih belum dibayar nih, bayar dulu yaa
+            </div>
+        </a>   
     @endif
     <div class="btn-group d-flex flex-wrap shadow-none mt-2 mt-lg-2 mt-md-2 mt-xl-2 ms-2 ms-lg-2 ms-md-2 ms-xl-2" >
         <ul class="nav nav-pills" id="myTab" role="tablist">

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\toko;
+use App\Models\Image;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\ImageController;
 
 class TokoController extends Controller
 {
@@ -48,17 +50,6 @@ class TokoController extends Controller
     public function destroy($id)
     {
         $toko = Toko::findOrFail($id);
-        
-        if($toko->photo_profile){
-            Storage::delete($toko->photo_profile);
-            $pp = Image::where('url', $toko->photo_profile)->first();
-            Image::delete($pp);
-        }
-        if($toko->background){
-            Storage::delete($toko->background);
-            $bg = Image::where('url', $toko->photo_profile)->first();
-            Image::delete($bg);
-        }
         $toko->delete();
         return back()->with('success', 'Profile Toko berhasil dihapus');
     }

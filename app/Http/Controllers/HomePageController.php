@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\About;
 use App\Models\Cart;
-use App\Models\Event;
-use App\Models\Rating;
 use App\Models\Toko;
+use App\Models\About;
+use App\Models\Event;
+use App\Models\Order;
+use App\Models\Rating;
 use App\Models\Produk; 
 use App\Models\Checkout;
 use App\Models\Kategori;
@@ -200,6 +201,7 @@ class HomepageController extends Controller
     
     public function transaksi(Request $request){
         $user = $request->user();
+        $belumDibayar = Order::where('status', 'menunggu pembayaran')->where('user_id', $user->id)->first();
         $all = Checkout::where('user_id', $user->id)->get();
         $menunggu = Checkout::where('user_id', $user->id)->where('status', 'menunggu konfirmasi')->get();
         $diproses = Checkout::where('user_id', $user->id)->where('status', 'Diproses')->get();
@@ -207,13 +209,14 @@ class HomepageController extends Controller
         $tiba = Checkout::where('user_id', $user->id)->where('status', 'tiba')->get();
         $dibatalkan = Checkout::where('user_id', $user->id)->where('status', 'dibatalkan')->get();
         $ditolak = Checkout::where('user_id', $user->id)->where('status', 'ditolak')->get();
-        $data = array('all' => $all, 
+        $data = array('all' => $all,
                     'menunggu' => $menunggu,
                     'diproses' => $diproses,
                     'dikirim' => $dikirim,
                     'tiba' => $tiba, 
                     'dibatalkan' => $dibatalkan,
-                    'ditolak' => $ditolak);
+                    'ditolak' => $ditolak,
+                    'belumDibayar' => $belumDibayar,);
         return view('homepage.transaksi', $data);
     }
 
